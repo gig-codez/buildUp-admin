@@ -10,13 +10,11 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { RoleTypes } from "@/types/roleTypes";
 import axios from "axios";
-import { addRole } from "@/routes/api.routes";
+import { addProfession, addRole } from "@/routes/api.routes";
 
 
-const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
-    roles.map((role) => {
-        console.log(role.name)
-    });
+const ProfessionsDataTable = ({ professions }: { professions: RoleTypes[] }) => {
+
     // useful hooks
     const [open, setOpen] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
@@ -48,7 +46,7 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
 
     const handleForm = async () => {
         // handle adding role
-        const response = await axios.post(addRole, { 'role': selectedData });
+        const response = await axios.post(addProfession, { 'name': selectedData, 'role': '' });
         if (response.status == 200) {
             setSnackMsg(response.data.message);
             setOpenSnack(true);
@@ -61,9 +59,7 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
     // end of helper functions
     const columns = [
         { field: '_id', headerName: 'ID', width: 250 },
-        { field: 'name', headerName: 'Name', width: 100 },
-        // { field: 'region', headerName: 'Region', width: 200 },
-        // { field: 'population', headerName: 'Population', width: 200 },
+        { field: 'name', headerName: 'Profession', width: 100 },
         { field: 'createdAt', headerName: 'Date Created', width: 300 },
         { field: 'updatedAt', headerName: 'Date Updated', width: 300 },
         {
@@ -102,20 +98,20 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
             <DataGrid
                 className='text-black dark:text-white'
                 columns={columns}
-                rows={roles}
+                rows={professions}
                 getRowId={(row) => `${row.id}`}
-                pageSizeOptions={[5, 10, 25, 50, 100]}
+                pageSizeOptions={[100, 50, 25, 10, 5]}
             />
             {/* dialog for editing */}
-            <CustomDialog open={openEdit} title={`Edit District: ${selectedData.name}`} closeDialog={() => setOpenEdit(false)}>
-                <CustomTextField label={`Name : ${selectedData.name}`} placeHolder={'Enter name....'} errorText={''} onEdit={(x: any) => console.log(x)} />
+            <CustomDialog open={openEdit} title={`Edit Profession: ${selectedData.name}`} closeDialog={() => setOpenEdit(false)}>
+                <CustomTextField label={`Profession : ${selectedData.name}`} placeHolder={'Enter profession....'} errorText={''} onEdit={(x: any) => console.log(x)} />
                 <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton>
             </CustomDialog>
 
 
             {/* dialog for adding new district */}
-            <CustomDialog open={open} closeDialog={handleClose} title={'New role'}>
-                <CustomTextField label={'Role Name'} error={false} placeHolder={'Enter role name....'} errorText={''} onEdit={(x: any) => console.log(x)} />
+            <CustomDialog open={open} closeDialog={handleClose} title={'New Profession'}>
+                <CustomTextField label={'Profession'} error={false} placeHolder={'Enter profession name....'} errorText={''} onEdit={(x: any) => console.log(x)} />
                 <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton>
             </CustomDialog>
 
@@ -161,4 +157,4 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
     );
 };
 
-export default RolesDataTable;
+export default ProfessionsDataTable;

@@ -1,6 +1,10 @@
+
 "use client"
 import React from "react";
+
+import { LoadingButton } from "@mui/lab";
 import { Stack, Button, Snackbar, IconButton } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import CustomDialog from "@/components/custom_dialog/custom_dialog";
 import CustomTextField from "@/components/textfield/custom_textfield";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -8,10 +12,9 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { RoleTypes } from "@/types/roleTypes";
 import axios from "axios";
 import { addProfession, addRole } from "@/routes/api.routes";
-import DataTable from "@/components/Datatable/datatable";
 
 
-const ProfessionsDataTable = () => {
+const ClientsDataTable = ({ professions }: { professions: RoleTypes[] }) => {
 
     // useful hooks
     const [open, setOpen] = React.useState(false);
@@ -56,52 +59,61 @@ const ProfessionsDataTable = () => {
     };
     // end of helper functions
     const columns = [
-        { field: '_id', headerName: 'ID', },
-        { field: 'name', headerName: 'Profession', },
-        { field: 'createdAt', headerName: 'Date Created', },
-        { field: 'updatedAt', headerName: 'Date Updated', },
-        { field: 'actions', headerName: 'Actions', },
-        // {
-        //     field: 'actions',
-        //     headerName: 'Actions',
-        //     renderCell: (params: any) => {
-        //         // Define your action buttons or menu
-        //         return (
-        //             <div>
-        //                 <IconButton onClick={() => handleEdit(params.row)}>
-        //                     <ModeEditIcon color="success" />
-        //                 </IconButton>
-        //                 <IconButton onClick={() => handleDelete(params.row)}>
-        //                     <DeleteOutlineIcon color="error" />
-        //                 </IconButton>
-        //             </div>
-        //         );
-        //     },
-        // },
+        { field: '_id', headerName: 'ID', width: 250 },
+        { field: 'name', headerName: 'Profession', width: 100 },
+        { field: 'createdAt', headerName: 'Date Created', width: 300 },
+        { field: 'updatedAt', headerName: 'Date Updated', width: 300 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            renderCell: (params: any) => {
+                // Define your action buttons or menu
+                return (
+                    <div>
+                        <IconButton onClick={() => handleEdit(params.row)}>
+                            <ModeEditIcon color="success" />
+                        </IconButton>
+                        <IconButton onClick={() => handleDelete(params.row)}>
+                            <DeleteOutlineIcon color="error" />
+                        </IconButton>
+                    </div>
+                );
+            },
+        },
     ];
 
 
     return (
         <div style={{ width: '100%' }}>
-            <DataTable columns={columns} rows={[]} title={'Professions'} actionComponent={<Button
-                style={{
-                    backgroundColor: "primary",
-                    color: "white",
-                    borderRadius: "5px",
-                    margin: "15px",
-                }}
-                variant="contained" onClick={handleClickOpen} size="small">Add New Roles</Button>} />
+            <Stack direction='row' justifyContent='space-between'>
+                <h1></h1>
+                <Button
+                    style={{
+                        backgroundColor: "primary",
+                        color: "white",
+                        borderRadius: "5px",
+                        margin: "15px",
+                    }}
+                    variant="contained" onClick={handleClickOpen} size="small">Add New Roles</Button>
+            </Stack>
+            <DataGrid
+                className='text-black dark:text-white'
+                columns={columns}
+                rows={professions}
+                getRowId={(row) => `${row.id}`}
+                pageSizeOptions={[100, 50, 25, 10, 5]}
+            />
             {/* dialog for editing */}
             <CustomDialog open={openEdit} title={`Edit Profession: ${selectedData.name}`} closeDialog={() => setOpenEdit(false)}>
                 <CustomTextField label={`Profession : ${selectedData.name}`} placeHolder={'Enter profession....'} errorText={''} onEdit={(x: any) => console.log(x)} />
-                {/* <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton> */}
+                <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton>
             </CustomDialog>
 
 
             {/* dialog for adding new district */}
             <CustomDialog open={open} closeDialog={handleClose} title={'New Profession'}>
                 <CustomTextField label={'Profession'} error={false} placeHolder={'Enter profession name....'} errorText={''} onEdit={(x: any) => console.log(x)} />
-                {/* <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton> */}
+                <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton>
             </CustomDialog>
 
 
@@ -146,4 +158,4 @@ const ProfessionsDataTable = () => {
     );
 };
 
-export default ProfessionsDataTable;
+export default ClientsDataTable;

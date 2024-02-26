@@ -1,28 +1,26 @@
 "use client"
 import React from "react";
 
-import { LoadingButton } from "@mui/lab";
 import { Stack, Button, Snackbar, IconButton } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import DataTable from "@/components/Datatable/datatable";
 import CustomDialog from "@/components/custom_dialog/custom_dialog";
 import CustomTextField from "@/components/textfield/custom_textfield";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { RoleTypes } from "@/types/roleTypes";
 import axios from "axios";
-import { addRole } from "@/routes/api.routes";
+import { addRole, getRoles } from "@/routes/api.routes";
 
 
-const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
-    roles.map((role) => {
-        console.log(role.name)
-    });
+const RolesDataTable = () => {
+
     // useful hooks
     const [open, setOpen] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
     const [loader, setLoader] = React.useState(false);
     const [selectedData, setSelectedData] = React.useState<RoleTypes>({} as RoleTypes);
+    const [roles, setRoles] = React.useState<RoleTypes[]>([]);
     const [openSnack, setOpenSnack] = React.useState(false);
     const [snackMsg, setSnackMsg] = React.useState("");
     // helper functions
@@ -46,6 +44,16 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
         setOpenSnack(false);
     };
 
+    async function fetchRoles(): Promise<RoleTypes[]> {
+        const response = await axios.get(getRoles);
+        return response.data;
+    }
+    React.useEffect(() => {
+        fetchRoles().then((x) => {
+            console.log(x)
+            setRoles(x);
+        });
+    }, []);
     const handleForm = async () => {
         // handle adding role
         const response = await axios.post(addRole, { 'role': selectedData });
@@ -62,8 +70,6 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
     const columns = [
         { field: '_id', headerName: 'ID', width: 250 },
         { field: 'name', headerName: 'Name', width: 100 },
-        // { field: 'region', headerName: 'Region', width: 200 },
-        // { field: 'population', headerName: 'Population', width: 200 },
         { field: 'createdAt', headerName: 'Date Created', width: 300 },
         { field: 'updatedAt', headerName: 'Date Updated', width: 300 },
         {
@@ -85,43 +91,31 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
         },
     ];
 
-
     return (
         <div style={{ width: '100%' }}>
-            <Stack direction='row' justifyContent='space-between'>
-                <h1></h1>
-                <Button
-                    style={{
-                        backgroundColor: "primary",
-                        color: "white",
-                        borderRadius: "5px",
-                        margin: "15px",
-                    }}
-                    variant="contained" onClick={handleClickOpen} size="small">Add New Roles</Button>
-            </Stack>
-            <DataGrid
-                className='text-black dark:text-white'
-                columns={columns}
-                rows={roles}
-                getRowId={(row) => `${row.id}`}
-                pageSizeOptions={[5, 10, 25, 50, 100]}
-            />
+            <DataTable rows={[]} columns={columns} actionComponent={<Button
+                style={{
+                    backgroundColor: "primary",
+                    color: "white",
+                    borderRadius: "5px",
+                    margin: "15px",
+                }}
+                variant="contained" onClick={handleClickOpen} size="small">Add New Roles</Button>} />
+
             {/* dialog for editing */}
-            <CustomDialog open={openEdit} title={`Edit District: ${selectedData.name}`} closeDialog={() => setOpenEdit(false)}>
+            {/* <CustomDialog open={openEdit} title={`Edit District: ${selectedData.name}`} closeDialog={() => setOpenEdit(false)}>
                 <CustomTextField label={`Name : ${selectedData.name}`} placeHolder={'Enter name....'} errorText={''} onEdit={(x: any) => console.log(x)} />
-                <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton>
-            </CustomDialog>
+            </CustomDialog> */}
 
 
             {/* dialog for adding new district */}
-            <CustomDialog open={open} closeDialog={handleClose} title={'New role'}>
+            {/* <CustomDialog open={open} closeDialog={handleClose} title={'New role'}>
                 <CustomTextField label={'Role Name'} error={false} placeHolder={'Enter role name....'} errorText={''} onEdit={(x: any) => console.log(x)} />
-                <LoadingButton loading={loader} variant="contained" style={{ backgroundColor: "primary", color: "white", borderRadius: "5px", margin: "10px" }} onClick={handleForm}>Add Record</LoadingButton>
-            </CustomDialog>
+            </CustomDialog> */}
 
 
             {/* dialog for deleting an infection */}
-            <CustomDialog
+            {/* <CustomDialog
                 open={openDelete}
                 closeDialog={handleClose}
                 title={'Delete District'}
@@ -146,17 +140,17 @@ const RolesDataTable = ({ roles }: { roles: RoleTypes[] }) => {
                 ]}
             >
                 <center>{`Are you sure you want to delete ${selectedData.name}?`}</center>
-            </CustomDialog>
+            </CustomDialog> */}
 
             {/* snackbar for short messages */}
 
-            <Snackbar
+            {/* <Snackbar
                 open={openSnack}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 autoHideDuration={1000}
                 onClose={handleClose}
                 message={snackMsg}
-            />
+            /> */}
         </div>
     );
 };

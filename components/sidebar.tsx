@@ -26,7 +26,7 @@ const sidebarLinks: SidebarLinks[] = [
     {
         link: "/",
         name: "Dashboard",
-        icon: <DashboardSvg />
+        icon: <DashboardSvg />,
     }, {
         link: "/professions",
         name: "Professions",
@@ -143,7 +143,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                     return (<li key={index}>
                                         <Link
                                             href={link.link}
-                                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === link.link || pathname.includes(link.link)) &&
+                                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === link.link) &&
                                                 "bg-graydark dark:bg-meta-4"
                                                 }`}
                                         >

@@ -2,7 +2,7 @@
 "use client"
 import React from "react";
 
-import { LoadingButton } from "@mui/lab";
+import { LoadingButton } from "@mui/material"
 import { Stack, Button, Snackbar, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import CustomDialog from "@/components/custom_dialog/custom_dialog";

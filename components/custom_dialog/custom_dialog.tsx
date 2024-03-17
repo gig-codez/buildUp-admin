@@ -30,7 +30,7 @@ export default function CustomDialog({ open, actions, title, children, closeDial
     return (
         <React.Fragment>
             <Dialog
-                fullWidth={maxWidth === 'xs' ? false : true}
+                fullWidth={maxWidth !== 'xs'}
                 maxWidth={maxWidth}
                 open={open}
                 TransitionComponent={Transition}

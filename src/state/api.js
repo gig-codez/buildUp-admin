@@ -49,10 +49,41 @@ export const api = createApi({
       query: () => `get/roles`,
       providesTags: ["Role"],
     }),
+    getProducts: build.query({
+      query: () => `client/product`,
+      providesTags: ["Products"],
+    }),
+    getCustomers: build.query({
+      query: () => `client/customer`,
+      providesTags: ["Customers"],
+    }),
+    
+    getUser: build.query({
+      query: () => `management/admin`,
+      providesTags: ["Admin"],
+    }),
+    getUserPerformance: build.query({
+      query: (id) => `management/affiliates/${id}`,
+      providesTags: ["Performance"],
+    }),
+    getGeneralDashboard: build.query({
+      query: () => `general/dashboard`,
+      providesTags: ["Dashboard"],
+    }),
   }),
 });
 
 export const {
+  useGetGeneralDashboardQuery,
+  useGetUserQuery,
+  useGetProductsQuery,
+  useGetCustomersQuery,
+  useGetTransactionsQuery,
+  useGetGeographyQuery,
+  useGetSalesQuery,
+  useGetAdminUsersQuery,
+  useGetUserPerformanceQuery,
+
   //nequeries
   useGetBusinessQuery,
   useGetCategoryQuery,
@@ -60,5 +91,5 @@ export const {
   useGetSuppliersQuery,
   useGetRoleQuery,
   useGetClientsQuery,
-  useGetContractorsQuery,
+  useGetContractorsQuery
 } = api;

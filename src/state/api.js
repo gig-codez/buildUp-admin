@@ -49,56 +49,10 @@ export const api = createApi({
       query: () => `get/roles`,
       providesTags: ["Role"],
     }),
-    getProducts: build.query({
-      query: () => `client/product`,
-      providesTags: ["Products"],
-    }),
-    getCustomers: build.query({
-      query: () => `client/customer`,
-      providesTags: ["Customers"],
-    }),
-    getTransactions: build.query({
-      query: ({ page, pageSize, sort, search }) => ({
-        url: "client/transaction",
-        method: "GET",
-        params: { page, pageSize, sort, search },
-      }),
-      providesTags: ["Transactions"],
-    }),
-    getGeography: build.query({
-      query: () => `client/geography`,
-      providesTags: ["Geography"],
-    }),
-    getSales: build.query({
-      query: () => `sales/sales`,
-      providesTags: ["Sales"],
-    }),
-    getUser: build.query({
-      query: () => `management/admin`,
-      providesTags: ["Admin"],
-    }),
-    getUserPerformance: build.query({
-      query: (id) => `management/affiliates/${id}`,
-      providesTags: ["Performance"],
-    }),
-    getGeneralDashboard: build.query({
-      query: () => `general/dashboard`,
-      providesTags: ["Dashboard"],
-    }),
   }),
 });
 
 export const {
-  useGetGeneralDashboardQuery,
-  useGetUserQuery,
-  useGetProductsQuery,
-  useGetCustomersQuery,
-  useGetTransactionsQuery,
-  useGetGeographyQuery,
-  useGetSalesQuery,
-  useGetAdminUsersQuery,
-  useGetUserPerformanceQuery,
-
   //nequeries
   useGetBusinessQuery,
   useGetCategoryQuery,
@@ -106,5 +60,5 @@ export const {
   useGetSuppliersQuery,
   useGetRoleQuery,
   useGetClientsQuery,
-  useGetContractorsQuery
+  useGetContractorsQuery,
 } = api;

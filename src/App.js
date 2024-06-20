@@ -15,6 +15,8 @@ import Roles from "scenes/roles";
 import Suppliers from "scenes/suppliers";
 import Business from "scenes/business";
 import CategoryTypes from "scenes/categoriestype";
+import Login from "scenes/login";
+import PrivateRoute from "components/PrivateRoute";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -26,10 +28,13 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
+            <Route path="/login" element={<Login />} />
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
+              <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
               <Route path="/dashboard" element={<Dashboard />} />
               {/* routes */}
+
               <Route path="/clients" element={<Clients />} />
               <Route path="/consultants" element={<Consultants />} />
               <Route path="/contractors" element={<Contractors />} />

@@ -82,5 +82,4 @@ export const Businesscolumns = [
       flex: 1,
     },
     
-    
   ];

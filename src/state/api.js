@@ -1,10 +1,28 @@
-import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { logout } from "state";
+const baseQuery = fetchBaseQuery({
+  baseUrl: process.env.REACT_APP_BASE_URL || "",
+  prepareHeaders: (headers, { getState }) => {
+    const token = getState().global.token;
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
 
-console.log("REACT_APP_BASE_URL:", process.env.REACT_APP_BASE_URL);
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    api.dispatch(logout());
+  }
+  return result;
+};
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL || "" }),
   reducerPath: "adminApi",
+  baseQuery: baseQueryWithReauth,
   tagTypes: [
     "Business",
     "Supplier",
@@ -57,7 +75,7 @@ export const api = createApi({
       query: () => `client/customer`,
       providesTags: ["Customers"],
     }),
-    
+
     getUser: build.query({
       query: () => `management/admin`,
       providesTags: ["Admin"],
@@ -69,6 +87,13 @@ export const api = createApi({
     getGeneralDashboard: build.query({
       query: () => `general/dashboard`,
       providesTags: ["Dashboard"],
+    }),
+    login: build.mutation({
+      query: (credentials) => ({
+        url: "admin/admin/login",
+        method: "POST",
+        body: credentials,
+      }),
     }),
   }),
 });
@@ -83,13 +108,12 @@ export const {
   useGetSalesQuery,
   useGetAdminUsersQuery,
   useGetUserPerformanceQuery,
-
-  //nequeries
   useGetBusinessQuery,
   useGetCategoryQuery,
   useGetProfessionQuery,
   useGetSuppliersQuery,
   useGetRoleQuery,
   useGetClientsQuery,
-  useGetContractorsQuery
+  useGetContractorsQuery,
+  useLoginMutation,
 } = api;

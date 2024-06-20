@@ -10,8 +10,6 @@ import StatBox from 'components/StatBox'
 ///tableheaders
 import { Businesscolumns,suppliercolumns,Categorycolumns } from 'utils/tableheaders'
 
-
-
 const Dashboard = () => {
    const {data:suplierdata,isLoading:isLoadingSupplierdata}=useGetSuppliersQuery();
    const {data:businessdata,isLoading:isLoadingBusinessdata}=useGetBusinessQuery();

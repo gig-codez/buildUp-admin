@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGetGeneralDashboardQuery } from 'state/api'
+
 import {useGetCategoryQuery, useGetBusinessQuery,useGetSuppliersQuery,useGetClientsQuery,useGetContractorsQuery } from 'state/api'
 import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
@@ -25,10 +25,10 @@ const Dashboard = () => {
 
 console.log(contractorslength,"contractorslength")
 
-  const {data,isLoading}=useGetGeneralDashboardQuery();
+  
   const isNonMediumScreens=useMediaQuery("(min-width:1200px)");
   const theme=useTheme();
-  console.log(data)
+  
 
   return (
     <Box m="1.5rem 2.5rem">

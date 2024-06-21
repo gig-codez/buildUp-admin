@@ -8,7 +8,7 @@ const columns = [
   {
     field: "business_name",
     headerName: "Business Name",
-    flex: 0.5,
+    flex: 1,
   },
   {
     field: "business_email",

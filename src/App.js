@@ -18,6 +18,7 @@ import Business from "scenes/business";
 import CategoryTypes from "scenes/categoriestype";
 import Login from "scenes/login";
 import PrivateRoute from "components/PrivateRoute";
+import Professional from "scenes/profesional";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -64,6 +65,10 @@ function App() {
               <Route
                 path="/business"
                 element={<PrivateRoute element={<Business />} />}
+              />
+              <Route
+                path="/professional"
+                element={<PrivateRoute element={<Professional />} />}
               />
             </Route>
           </Routes>

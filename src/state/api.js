@@ -30,12 +30,7 @@ export const api = createApi({
     "Professional",
     "Consultants",
     "Contractors",
-    "User",
-    "Geography",
-    "Sales",
-    "Admin",
-    "Performance",
-    "Dashboard",
+    "Profession",
   ],
   endpoints: (build) => ({
     getBusiness: build.query({
@@ -67,27 +62,6 @@ export const api = createApi({
       query: () => `get/roles`,
       providesTags: ["Role"],
     }),
-    getProducts: build.query({
-      query: () => `client/product`,
-      providesTags: ["Products"],
-    }),
-    getCustomers: build.query({
-      query: () => `client/customer`,
-      providesTags: ["Customers"],
-    }),
-
-    getUser: build.query({
-      query: () => `management/admin`,
-      providesTags: ["Admin"],
-    }),
-    getUserPerformance: build.query({
-      query: (id) => `management/affiliates/${id}`,
-      providesTags: ["Performance"],
-    }),
-    getGeneralDashboard: build.query({
-      query: () => `general/dashboard`,
-      providesTags: ["Dashboard"],
-    }),
     login: build.mutation({
       query: (credentials) => ({
         url: "admin/admin/login",
@@ -95,19 +69,30 @@ export const api = createApi({
         body: credentials,
       }),
     }),
+    //proffesional
+    getProfession: build.query({
+      query: () => `get/admin/profession`,
+      providesTags: ["Profession"],
+    }),
+    createProfession: build.mutation({
+      query: (newProfession) => ({
+        url: `admin/profession`,
+        method: "POST",
+        body: newProfession,
+      }),
+      invalidatesTags: ["Profession"],
+    }),
+    deleteProfession: build.mutation({
+      query: (id) => ({
+        url: `delete/admin/profession/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Profession"],
+    }),
   }),
 });
 
 export const {
-  useGetGeneralDashboardQuery,
-  useGetUserQuery,
-  useGetProductsQuery,
-  useGetCustomersQuery,
-  useGetTransactionsQuery,
-  useGetGeographyQuery,
-  useGetSalesQuery,
-  useGetAdminUsersQuery,
-  useGetUserPerformanceQuery,
   useGetBusinessQuery,
   useGetCategoryQuery,
   useGetProfessionQuery,
@@ -116,4 +101,6 @@ export const {
   useGetClientsQuery,
   useGetContractorsQuery,
   useLoginMutation,
+  useCreateProfessionMutation,
+  useDeleteProfessionMutation,
 } = api;

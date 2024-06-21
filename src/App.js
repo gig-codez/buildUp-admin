@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { themeSettings } from "theme";
 import Dashboard from "scenes/dashboard";
 import Layout from "scenes/layout";
+import "react-toastify/dist/ReactToastify.css";
 
 ///components
 import Clients from "scenes/clients";
@@ -30,18 +31,40 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route element={<Layout />}>
-              {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
-              <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              {/* routes */}
-
-              <Route path="/clients" element={<Clients />} />
-              <Route path="/consultants" element={<Consultants />} />
-              <Route path="/contractors" element={<Contractors />} />
-              <Route path="/suppliers" element={<Suppliers />} />
-              <Route path="/roles" element={<Roles />} />
-              <Route path="/categoryTypes" element={<CategoryTypes />} />
-              <Route path="/business" element={<Business />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route
+                path="/dashboard"
+                element={<PrivateRoute element={<Dashboard />} />}
+              />
+              {/* protected routes */}
+              <Route
+                path="/clients"
+                element={<PrivateRoute element={<Clients />} />}
+              />
+              <Route
+                path="/consultants"
+                element={<PrivateRoute element={<Consultants />} />}
+              />
+              <Route
+                path="/contractors"
+                element={<PrivateRoute element={<Contractors />} />}
+              />
+              <Route
+                path="/suppliers"
+                element={<PrivateRoute element={<Suppliers />} />}
+              />
+              <Route
+                path="/roles"
+                element={<PrivateRoute element={<Roles />} />}
+              />
+              <Route
+                path="/categoryTypes"
+                element={<PrivateRoute element={<CategoryTypes />} />}
+              />
+              <Route
+                path="/business"
+                element={<PrivateRoute element={<Business />} />}
+              />
             </Route>
           </Routes>
         </ThemeProvider>

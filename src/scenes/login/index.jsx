@@ -3,24 +3,27 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from 'state/api';
-import { loginSuccess } from 'state';
+import { loginSuccess } from "state"
 import { TextField, Button, Box, Typography, Container, CircularProgress } from '@mui/material';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
-  
+
   const onSubmit = async (data) => {
     try {
-      console.log(data,"data");
+      console.log(data, "data");
       const response = await login(data).unwrap();
-      console.log(response);
+      console.log(response, "response");
       dispatch(loginSuccess(response));
-      navigate('/dashboard'); 
+      toast.success('Login successful!');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Login failed', error);
+      toast.error('Login failed. Please check your credentials and try again.');
     }
   };
 
@@ -35,7 +38,7 @@ const Login = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-           Admin Login 
+          Admin Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
           <TextField

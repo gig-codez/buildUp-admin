@@ -15,14 +15,11 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data, "data");
       const response = await login(data).unwrap();
-      console.log(response, "response");
       dispatch(loginSuccess(response));
       toast.success('Login successful!');
       navigate('/dashboard');
     } catch (error) {
-      console.error('Login failed', error);
       toast.error('Login failed. Please check your credentials and try again.');
     }
   };

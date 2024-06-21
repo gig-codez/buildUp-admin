@@ -51,8 +51,6 @@ const Business = () => {
   const theme = useTheme();
   const businessArray = data?.data;
 
-  console.log(businessArray);
-
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="Business" subtitle="List of Businesses" />

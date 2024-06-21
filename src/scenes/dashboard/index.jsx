@@ -23,9 +23,6 @@ const Dashboard = () => {
   const clientslength=clientsdata?.length
   const contractorslength=contractorsdata?.data?.length
 
-console.log(contractorslength,"contractorslength")
-
-  
   const isNonMediumScreens=useMediaQuery("(min-width:1200px)");
   const theme=useTheme();
   

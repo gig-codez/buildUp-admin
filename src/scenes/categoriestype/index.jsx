@@ -29,7 +29,6 @@ const columns = [
 const CategoryTypes = () => {
   const { data, isLoading } = useGetCategoryQuery();
   const theme = useTheme();
-  console.log(data);
 
   return (
     <Box m="1.5rem 2.5rem">

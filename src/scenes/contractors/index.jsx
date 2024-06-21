@@ -34,11 +34,7 @@ const columns = [
 
 const Contractors = () => {
   const { data, isLoading } =useGetContractorsQuery();
-  console.log(data,"hsdfh")
   const theme = useTheme();
-
-  console.log(data);
-
   const contractor_data=data?.data
   return (
     <Box m="1.5rem 2.5rem">

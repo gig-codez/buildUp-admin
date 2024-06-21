@@ -22,10 +22,6 @@ const columns = [
 const Roles = () => {
   const { data, isLoading } = useGetRoleQuery();
   const theme = useTheme();
- 
-  
-  console.log(data);
-
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="ROLES" subtitle="List of roles" />

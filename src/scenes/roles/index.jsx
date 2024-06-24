@@ -33,7 +33,18 @@ const Roles = () => {
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: theme.palette.background.alt,
             color: theme.palette.secondary[100],
-            borderBottom: "none"
+            fontWeight: 'bold', // Make header text bold
+          },
+          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
+            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
+            // Add left border to header and cells
+           
+          },
+          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
+            borderLeft: "none !important" // Remove left border for first column
+          },
+          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
+            borderRight: "none !important" // Remove right border for last column
           },
           "& .MuiDataGrid-virtualScroller": {
             backgroundColor: theme.palette.primary.light

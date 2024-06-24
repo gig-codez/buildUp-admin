@@ -67,6 +67,11 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                                         <ChevronLeft />
                                     </IconButton>
                                 )}
+                                {!isNonMobile && (
+                                    <IconButton onClick={() => setSidebarOpen(!isSidebarOpen)}>
+                                        <ChevronLeft />
+                                    </IconButton>
+                                )}
                             </FlexBetween>
                         </Box>
                         {/* List of Items */}

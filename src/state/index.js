@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  mode: "dark",
+  mode: "light",
   token: localStorage.getItem("token"), // persist token in localStorage
   userId: null,
   name: null,

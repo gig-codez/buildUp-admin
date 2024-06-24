@@ -42,7 +42,6 @@ const columns = [
     field: "business_tel",
     headerName: "Business Tel",
     flex: 0.5,
-    
   }
 ];
 
@@ -54,7 +53,7 @@ const Business = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="Business" subtitle="List of Businesses" />
-      <Box mt="40px" height="200vh"
+      <Box mt="40px" height="100vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none"
@@ -62,7 +61,19 @@ const Business = () => {
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: theme.palette.background.alt,
             color: theme.palette.secondary[100],
-            borderBottom: "none"
+           
+            fontWeight: 'bold', // Make header text bold
+          },
+          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
+            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
+            borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
+           
+          },
+          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
+            borderLeft: "none !important" // Remove left border for first column
+          },
+          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
+            borderRight: "none !important" // Remove right border for last column
           },
           "& .MuiDataGrid-virtualScroller": {
             backgroundColor: theme.palette.primary.light

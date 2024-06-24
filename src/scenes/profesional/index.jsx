@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Modal, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Button, Modal, TextField, Typography, useTheme, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { useGetProfessionQuery, useCreateProfessionMutation, useDeleteProfessionMutation } from 'state/api';
 import Header from 'components/Header';
@@ -12,11 +12,13 @@ const Professional = () => {
 
   const [open, setOpen] = useState(false);
   const [newProfession, setNewProfession] = useState({ name: '' });
+  const [deleteId, setDeleteId] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setNewProfession({ name: '' }); // Reset the newProfession state when the modal is closed
+    setNewProfession({ name: '' });
   };
 
   const handleChange = (e) => {
@@ -32,23 +34,34 @@ const Professional = () => {
     handleClose();
   };
 
-  const handleDelete = async (id) => {
-    await deleteProfession(id);
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    await deleteProfession(deleteId);
+    setConfirmOpen(false);
+    setDeleteId(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmOpen(false);
+    setDeleteId(null);
   };
 
   const columns = [
-    { field: 'name', headerName: 'Profession', flex: 1 },
-    { field: 'createdAt', headerName: 'Created At', flex: 1 },
-    
+    { field: 'name', headerName: 'Profession', flex: 0.5 },
+    { field: 'createdAt', headerName: 'Created At', flex: 0.5 },
     {
       field: 'actions',
       headerName: 'Actions',
-      flex: 1,
+      flex: 0.5,
       renderCell: (params) => (
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => handleDelete(params.id)}
+          onClick={() => handleDeleteClick(params.id)}
         >
           Delete
         </Button>
@@ -60,13 +73,13 @@ const Professional = () => {
 
   return (
     <Box m="1.5rem 2.5rem">
-        <Box  display="flex" justifyContent="space-between" alignItems="center">
-      <Header title="Professional" subtitle="List of Professional" />
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Add Profession
-      </Button>
-    </Box>
-      
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header title="Professional" subtitle="List of Professional" />
+        <Button variant="contained" color="primary" onClick={handleOpen}>
+          Add Profession
+        </Button>
+      </Box>
+
       <Modal open={open} onClose={handleClose}>
         <Box sx={{ ...modalStyle, width: 400 }}>
           <Typography variant="h6" component="h2">
@@ -95,37 +108,76 @@ const Professional = () => {
           </Button>
         </Box>
       </Modal>
+
+      <Dialog
+        open={confirmOpen}
+        onClose={handleDeleteCancel}
+      >
+        <DialogTitle>{"Confirm Delete"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this profession?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Box
         mt="20px"
-        height="200vh"
+        height="100vh" // Adjusted height
         sx={{
-          '& .MuiDataGrid-root': {
-            border: 'none',
+          "& .MuiDataGrid-root": {
+            border: "none"
           },
-          '& .MuiDataGrid-columnHeaders': {
+          "& .MuiDataGrid-columnHeaders": {
             backgroundColor: theme.palette.background.alt,
             color: theme.palette.secondary[100],
-            borderBottom: 'none',
+            
+            fontWeight: 'bold', // Make header text bold
           },
-          '& .MuiDataGrid-virtualScroller': {
-            backgroundColor: theme.palette.primary.light,
+          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
+            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
+            borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
+           
           },
-          '& .MuiDataGrid-footerContainer': {
+          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
+            borderLeft: "none !important" // Remove left border for first column
+          },
+          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
+            borderRight: "none !important" // Remove right border for last column
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: theme.palette.primary.light
+          },
+          "& .MuiDataGrid-footerContainer": {
             backgroundColor: theme.palette.background.alt,
             color: theme.palette.secondary[100],
-            borderTop: 'none',
+            borderTop: "none",
           },
-          '& .MuiDataGrid-toolbarContainer .MuiButton-text': {
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
             color: `${theme.palette.secondary[200]} !important`,
           },
         }}
       >
-        <DataGrid
-          loading={isLoading}
-          getRowId={(row) => row._id}
-          columns={columns}
-          rows={professionData}
-        />
+        {isLoading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <DataGrid
+            loading={isLoading}
+            getRowId={(row) => row._id}
+            columns={columns}
+            rows={professionData}
+          />
+        )}
       </Box>
     </Box>
   );

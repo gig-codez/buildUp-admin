@@ -5,7 +5,6 @@ import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, Shop
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import me from "assets/me.jpg";
-// import Professional from 'scenes/profesional';
 
 const navItems = [
     { text: "Dashboard", icon: <HomeOutlined /> },

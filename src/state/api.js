@@ -50,10 +50,6 @@ export const api = createApi({
       query: () => `get/contractors`,
       providesTags: ["Contractors"],
     }),
-    getProfession: build.query({
-      query: () => `get/admin/profession`,
-      providesTags: ["Profession"],
-    }),
     getCategory: build.query({
       query: () => `get/admin/supplier-type`,
       providesTags: ["Profession"],

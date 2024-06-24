@@ -13,8 +13,8 @@ import { Businesscolumns,suppliercolumns,Categorycolumns } from 'utils/tablehead
 const Dashboard = () => {
    const {data:suplierdata,isLoading:isLoadingSupplierdata}=useGetSuppliersQuery();
    const {data:businessdata,isLoading:isLoadingBusinessdata}=useGetBusinessQuery();
-   const {data:clientsdata,isLoading:isLoadingClientsData}=useGetClientsQuery();
-   const {data:contractorsdata,isLoading:isLoadingContractorsData}=useGetContractorsQuery();
+   const {data:clientsdata}=useGetClientsQuery();
+   const {data:contractorsdata}=useGetContractorsQuery();
    const { data:categorydata, isLoading:categoryLoadingData } = useGetCategoryQuery();
   
    //length

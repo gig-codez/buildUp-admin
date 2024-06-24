@@ -1,11 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
-import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, AttachMoneyOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, EventOutlined, WorkOutline, BuildOutlined, EngineeringOutlined } from '@mui/icons-material';
+import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined,  WorkOutline, BuildOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import me from "assets/me.jpg";
-import Professional from 'scenes/profesional';
 
 const navItems = [
     { text: "Dashboard", icon: <HomeOutlined /> },

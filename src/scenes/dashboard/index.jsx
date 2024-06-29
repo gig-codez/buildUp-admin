@@ -1,31 +1,31 @@
 import React from 'react'
 
-import {useGetCategoryQuery, useGetBusinessQuery,useGetSuppliersQuery,useGetClientsQuery,useGetContractorsQuery } from 'state/api'
+import { useGetCategoryQuery, useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery } from 'state/api'
 import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
-import {AttachMoneyOutlined,Groups2Outlined,ReceiptLongOutlined,ShoppingCartOutlined} from '@mui/icons-material'
-import { Box,useTheme,useMediaQuery } from '@mui/material'
+import { AttachMoneyOutlined, Groups2Outlined, ReceiptLongOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import { Box, useTheme, useMediaQuery } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import StatBox from 'components/StatBox'
 ///tableheaders
-import { Businesscolumns,suppliercolumns,Categorycolumns } from 'utils/tableheaders'
+import { Businesscolumns, suppliercolumns, Categorycolumns } from 'utils/tableheaders'
 
 const Dashboard = () => {
-   const {data:suplierdata,isLoading:isLoadingSupplierdata}=useGetSuppliersQuery();
-   const {data:businessdata,isLoading:isLoadingBusinessdata}=useGetBusinessQuery();
-   const {data:clientsdata}=useGetClientsQuery();
-   const {data:contractorsdata}=useGetContractorsQuery();
-   const { data:categorydata, isLoading:categoryLoadingData } = useGetCategoryQuery();
-  
-   //length
-  const supplierlength=suplierdata?.data?.length
-  const businesslength=businessdata?.data?.length
-  const clientslength=clientsdata?.length
-  const contractorslength=contractorsdata?.data?.length
+  const { data: suplierdata, isLoading: isLoadingSupplierdata } = useGetSuppliersQuery();
+  const { data: businessdata, isLoading: isLoadingBusinessdata } = useGetBusinessQuery();
+  const { data: clientsdata } = useGetClientsQuery();
+  const { data: contractorsdata } = useGetContractorsQuery();
+  const { data: categorydata, isLoading: categoryLoadingData } = useGetCategoryQuery();
 
-  const isNonMediumScreens=useMediaQuery("(min-width:1200px)");
-  const theme=useTheme();
-  
+  //length
+  const supplierlength = suplierdata?.data?.length
+  const businesslength = businessdata?.data?.length
+  const clientslength = clientsdata?.length
+  const contractorslength = contractorsdata?.data?.length
+
+  const isNonMediumScreens = useMediaQuery("(min-width:1200px)");
+  const theme = useTheme();
+
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -72,7 +72,7 @@ const Dashboard = () => {
           title="Total Suppliers"
           value={supplierlength}
           icon={
-            <Groups2Outlined 
+            <Groups2Outlined
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
@@ -84,7 +84,7 @@ const Dashboard = () => {
           p="1rem"
           borderRadius="0.55rem"
         >
-           <DataGrid
+          <DataGrid
             loading={isLoadingSupplierdata || !suplierdata}
             getRowId={(row) => row._id}
             rows={suplierdata?.data || []}
@@ -103,7 +103,7 @@ const Dashboard = () => {
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
-                 
+
                 },
                 padding: "10px 0",
               },
@@ -173,7 +173,7 @@ const Dashboard = () => {
             },
           }}
         >
-         
+
           <DataGrid
             loading={isLoadingBusinessdata || !businessdata}
             getRowId={(row) => row._id}
@@ -193,7 +193,7 @@ const Dashboard = () => {
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
-                 
+
                 },
                 padding: "10px 0",
               },
@@ -221,45 +221,45 @@ const Dashboard = () => {
           p="1.5rem"
           borderRadius="0.55rem"
         >
-          <DataGrid 
-          loading={categoryLoadingData || !categorydata}
-          getRowId={(row) => row._id}
-          columns={Categorycolumns}
-          rows={categorydata || []}
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-              borderBottom: `1px solid ${theme.palette.divider}`,
-              "& .MuiDataGrid-columnHeaderTitle": {
-                fontWeight: "bold",
-               
+          <DataGrid
+            loading={categoryLoadingData || !categorydata}
+            getRowId={(row) => row._id}
+            columns={Categorycolumns}
+            rows={categorydata || []}
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
+                borderRadius: "5rem",
               },
-              padding: "10px 0",
-            },
-            "& .MuiDataGrid-columnSeparator": {
-              display: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
-        />
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontWeight: "bold",
+
+                },
+                padding: "10px 0",
+              },
+              "& .MuiDataGrid-columnSeparator": {
+                display: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: theme.palette.background.alt,
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderTop: "none",
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${theme.palette.secondary[200]} !important`,
+              },
+            }}
+          />
         </Box>
       </Box>
     </Box>

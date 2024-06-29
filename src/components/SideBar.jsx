@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
-import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined,  WorkOutline, BuildOutlined } from '@mui/icons-material';
+import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, WorkOutline, BuildOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import me from "assets/me.jpg";
@@ -12,11 +12,14 @@ const navItems = [
     { text: "Business", icon: <ShoppingCartOutlined /> },
     { text: "Suppliers", icon: <Groups2Outlined /> },
     { text: "Clients", icon: <ReceiptLongOutlined /> },
-    { text: "Contractors", icon: <BuildOutlined /> },  
-    { text: "Professional", icon: <WorkOutline /> },  
+    { text: "Contractors", icon: <BuildOutlined /> },
+    { text: "Professional", icon: <WorkOutline /> },
     { text: "CATEGORIES", icon: null },
-    { text: "Category Types", icon: <PointOfSaleOutlined /> },
+    { text: "Supplier Types", icon: <PointOfSaleOutlined /> },
+    { text: "supplierdeals", icon: <PointOfSaleOutlined /> },
     { text: "Roles", icon: <TodayOutlined /> },
+
+    
 ];
 
 const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth }) => {

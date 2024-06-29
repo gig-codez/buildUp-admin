@@ -19,6 +19,8 @@ import CategoryTypes from "scenes/categoriestype";
 import Login from "scenes/login";
 import PrivateRoute from "components/PrivateRoute";
 import Professional from "scenes/profesional";
+import SupplierTypes from "scenes/suppliertype";
+import Deals from "scenes/deals";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -66,9 +68,18 @@ function App() {
                 path="/business"
                 element={<PrivateRoute element={<Business />} />}
               />
+
               <Route
                 path="/professional"
                 element={<PrivateRoute element={<Professional />} />}
+              />
+              <Route
+                path="/suppliertypes"
+                element={<PrivateRoute element={<SupplierTypes />} />}
+              />
+              <Route
+                path="/supplierdeals"
+                element={<PrivateRoute element={<Deals />} />}
               />
             </Route>
           </Routes>

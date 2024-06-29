@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "state";
+
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_BASE_URL || "",
   prepareHeaders: (headers, { getState }) => {
@@ -31,13 +32,14 @@ export const api = createApi({
     "Consultants",
     "Contractors",
     "Profession",
+    "Suppliertypes",
+    "Deals",
   ],
   endpoints: (build) => ({
     getBusiness: build.query({
       query: () => `get/business`,
       providesTags: ["Business"],
     }),
-
     getSuppliers: build.query({
       query: () => `get/suppliers`,
       providesTags: ["Supplier"],
@@ -65,7 +67,40 @@ export const api = createApi({
         body: credentials,
       }),
     }),
-    //proffesional
+    // supplier types
+    getSuppliertypes: build.query({
+      query: () => `get/admin/supplier-type`,
+      providesTags: ["Suppliertypes"],
+    }),
+    createSuppliertypes: build.mutation({
+      query: (newSupplierTypes) => ({
+        url: `admin/supplier-type`,
+        method: "POST",
+        body: newSupplierTypes,
+      }),
+      invalidatesTags: ["newSupplierTypes"],
+    }),
+    // supplier deals
+    getDeals: build.query({
+      query: () => `get/deals`,
+      providesTags: ["Deals"],
+    }),
+    addDeals: build.mutation({
+      query: (newDeal) => ({
+        url: `post/deals/add`,
+        method: "POST",
+        body: newDeal,
+      }),
+      invalidatesTags: ["Deals"],
+    }),
+    deleteDeals: build.mutation({
+      query: (id) => ({
+        url: `delete/deals/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Deals"],
+    }),
+    // professional
     getProfession: build.query({
       query: () => `get/admin/profession`,
       providesTags: ["Profession"],
@@ -99,4 +134,12 @@ export const {
   useLoginMutation,
   useCreateProfessionMutation,
   useDeleteProfessionMutation,
+  useCreateSuppliertypesMutation,
+  useGetSuppliertypesQuery,
+  useAddDealsMutation,
+  useDeleteDealsMutation,
+  useGetDealsQuery,
+  useGetSupplierDealsQuery,
+  useGetSupplierDealsBySupplierIdQuery,
+  useAddDealMutation,
 } = api;

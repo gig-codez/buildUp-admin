@@ -42,7 +42,7 @@ const columns = [
 
 const Clients = () => {
   const { data, isLoading } = useGetClientsQuery(); 
-
+ 
   const theme = useTheme();
 
   return (

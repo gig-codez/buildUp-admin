@@ -41,7 +41,9 @@ const columns = [
 ];
 
 const Clients = () => {
-  const { data, isLoading } = useGetClientsQuery(); 
+  const { data, isLoading } = useGetClientsQuery();
+  const newdata= data?.employers
+  // console.log();
  
   const theme = useTheme();
 
@@ -87,7 +89,7 @@ const Clients = () => {
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
-          rows={data || []}
+          rows={newdata || []}
         />
       </Box>
     </Box>

@@ -136,6 +136,11 @@ export const api = createApi({
       }),
       invalidatesTags: ["account"],
     }),
+    ///consultants
+    getConsutants: build.query({
+      query: () => `get/consultants`,
+      providesTags: ["Supplier"],
+    }),
   }),
 });
 
@@ -157,6 +162,7 @@ export const {
   useGetDealsQuery,
   useActivateUserMutation,
   useDeactivateUserMutation,
+  useGetConsutantsQuery,
   useGetSupplierDealsQuery,
   useGetSupplierDealsBySupplierIdQuery,
   useAddDealMutation,

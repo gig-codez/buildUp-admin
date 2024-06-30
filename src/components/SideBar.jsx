@@ -5,6 +5,7 @@ import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, Shop
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import me from "assets/me.jpg";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
 const navItems = [
@@ -14,6 +15,7 @@ const navItems = [
     { text: "Suppliers", icon: <Groups2Outlined /> },
     { text: "Clients", icon: <ReceiptLongOutlined /> },
     { text: "Contractors", icon: <BuildOutlined /> },
+    { text: "Consultants", icon: <LocalOfferIcon/> },
     { text: "Professional", icon: <WorkOutline /> },
     { text: "CATEGORIES", icon: null },
     { text: "Supplier Types", icon: <PointOfSaleOutlined /> },

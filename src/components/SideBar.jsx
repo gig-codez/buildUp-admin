@@ -5,6 +5,7 @@ import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, Shop
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import me from "assets/me.jpg";
+import HandshakeIcon from '@mui/icons-material/Handshake';
 
 const navItems = [
     { text: "Dashboard", icon: <HomeOutlined /> },
@@ -16,7 +17,7 @@ const navItems = [
     { text: "Professional", icon: <WorkOutline /> },
     { text: "CATEGORIES", icon: null },
     { text: "Supplier Types", icon: <PointOfSaleOutlined /> },
-    { text: "supplierdeals", icon: <PointOfSaleOutlined /> },
+    { text: "Supplier Deals", icon: <HandshakeIcon/> },
     { text: "Roles", icon: <TodayOutlined /> },
 
     

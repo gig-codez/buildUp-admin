@@ -120,6 +120,22 @@ export const api = createApi({
       }),
       invalidatesTags: ["Profession"],
     }),
+
+    //activate
+    activateUser: build.mutation({
+      query: (id) => ({
+        url: `admin/reactivate/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["account"],
+    }),
+    deactivateUser: build.mutation({
+      query: (id) => ({
+        url: `admin/deactivate/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["account"],
+    }),
   }),
 });
 
@@ -139,6 +155,8 @@ export const {
   useAddDealsMutation,
   useDeleteDealsMutation,
   useGetDealsQuery,
+  useActivateUserMutation,
+  useDeactivateUserMutation,
   useGetSupplierDealsQuery,
   useGetSupplierDealsBySupplierIdQuery,
   useAddDealMutation,

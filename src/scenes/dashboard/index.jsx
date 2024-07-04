@@ -1,24 +1,23 @@
 import React from 'react'
 
-import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetConsutantsQuery,useGetSuppliertypesQuery,useGetDealsQuery } from 'state/api'
+import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery } from 'state/api'
 import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
-import { AttachMoneyOutlined,PointOfSaleOutlined,Groups2Outlined, BuildOutlined,ReceiptLongOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import { PointOfSaleOutlined,Groups2Outlined, BuildOutlined,ReceiptLongOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 import { Box, useTheme, useMediaQuery } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import StatBox from 'components/StatBox'
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 ///tableheaders
-import { Businesscolumns, suppliercolumns, Categorycolumns } from 'utils/tableheaders'
+import { Businesscolumns,Categorycolumns } from 'utils/tableheaders'
 
 const Dashboard = () => {
-  const { data: suplierdata, isLoading: isLoadingSupplierdata } = useGetSuppliersQuery();
+  const { data: suplierdata } = useGetSuppliersQuery();
   const { data: businessdata, isLoading: isLoadingBusinessdata } = useGetBusinessQuery();
   const { data: clientsdata } = useGetClientsQuery();
   const { data: contractorsdata } = useGetContractorsQuery();
   const { data: categorydata, isLoading: categoryLoadingData } = useGetCategoryQuery();
-  const { data: dealsData, isLoading: isLoadingDeals } = useGetDealsQuery();
+  const { data: dealsData } = useGetDealsQuery();
 
   //length
   const supplierlength = suplierdata?.data?.length

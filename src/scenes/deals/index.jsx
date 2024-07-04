@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Box, Button, Modal, TextField, Typography, useTheme, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useGetDealsQuery, useGetCategoryQuery,useAddDealsMutation, useDeleteDealsMutation, useGetSupplierTypesQuery } from 'state/api';
+import { useGetDealsQuery, useGetCategoryQuery, useAddDealsMutation, useDeleteDealsMutation } from 'state/api';
 import Header from 'components/Header';
 
 const Deals = () => {
   const theme = useTheme();
   const { data: dealsData, isLoading: isLoadingDeals } = useGetDealsQuery();
-  const { data: supplierTypesData, isLoading: isLoadingSupplierTypes } = useGetCategoryQuery();
+  const { data: supplierTypesData } = useGetCategoryQuery();
+  // Ensure this logs the expected data
   const [addDeals] = useAddDealsMutation();
   const [deleteDeals] = useDeleteDealsMutation();
 
@@ -72,7 +73,7 @@ const Deals = () => {
   ];
 
   const dealData = dealsData ? dealsData.deals : [];
-  const supplierTypes = supplierTypesData ? supplierTypesData.supplierTypes : [];
+  const supplierTypes = supplierTypesData ? supplierTypesData : [];
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -110,7 +111,7 @@ const Deals = () => {
               onChange={handleChange}
               label="Supplier Type"
             >
-              {supplierTypes.map((type) => (
+              {supplierTypes?.map((type) => (
                 <MenuItem key={type._id} value={type._id}>
                   {type.name}
                 </MenuItem>

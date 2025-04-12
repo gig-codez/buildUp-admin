@@ -7,7 +7,8 @@ import Header from 'components/Header';
 const Deals = () => {
   const theme = useTheme();
   const { data: dealsData, isLoading: isLoadingDeals } = useGetDealsQuery();
-  const { data: supplierTypesData, } = useGetCategoryQuery();
+  const { data: supplierTypesData } = useGetCategoryQuery();
+  // Ensure this logs the expected data
   const [addDeals] = useAddDealsMutation();
   const [deleteDeals] = useDeleteDealsMutation();
 
@@ -110,7 +111,7 @@ const Deals = () => {
               onChange={handleChange}
               label="Supplier Type"
             >
-              {supplierTypes.map((type) => (
+              {supplierTypes?.map((type) => (
                 <MenuItem key={type._id} value={type._id}>
                   {type.name}
                 </MenuItem>

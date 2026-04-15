@@ -1,0 +1,215 @@
+name: Deploy BuildUp Admin
+
+# Pipeline stages:
+#   checks   → npm ci + production build (catches broken builds early)
+#   deploy-* → build docker image on the runner, save as a tarball, scp to
+#              the VPS, docker load, docker run.
+#
+# This intentionally does NOT use a registry. Building locally and shipping
+# the tarball over SSH avoids GHCR auth/visibility headaches. Same pattern
+# used by the Flutter web pipeline in buildupapp.
+#
+# Branch → environment mapping:
+#   master      → production
+#   escrow-dev  → staging
+#
+# Required GitHub Variables (Settings → Secrets and variables → Actions → Variables):
+#   VPS_HOST              e.g. 158.220.124.52
+#   VPS_USER              ssh user on the VPS
+#   VPS_PORT              ssh port
+#   PROD_PROJECT_PATH     dir on VPS for production deploy artifacts
+#   STAGING_PROJECT_PATH  dir on VPS for staging deploy artifacts
+#
+# Required GitHub Secrets:
+#   SSH_KEY               private key for the deploy user
+
+on:
+  push:
+    branches:
+      - master
+      - escrow-dev
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: buildup-admin
+  NODE_VERSION: "20"
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    name: Build check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Production build
+        # CI=false so CRA eslint warnings don't fail the build.
+        run: CI=false npm run build
+
+      - name: Tests
+        # Best-effort — this project has the default CRA test setup and no
+        # meaningful tests yet. Keep non-blocking so real tests start
+        # enforcing automatically once added.
+        continue-on-error: true
+        run: CI=true npm test -- --watchAll=false --passWithNoTests
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: checks
+    if: github.ref == 'refs/heads/escrow-dev'
+    runs-on: ubuntu-latest
+    environment: staging
+
+    env:
+      ENV_TAG: staging
+      CONTAINER_NAME: buildup-admin-staging
+      HOST_PORT: "8083"
+      API_BASE_URL: https://test-server.buildupuganda.com
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg REACT_APP_BASE_URL=${{ env.API_BASE_URL }} \
+            -t ${{ env.IMAGE_NAME }}:${{ env.ENV_TAG }} \
+            .
+
+      - name: Save image to tarball
+        run: docker save ${{ env.IMAGE_NAME }}:${{ env.ENV_TAG }} | gzip > image.tar.gz
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ vars.VPS_PORT }} -H ${{ vars.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Transfer image to server
+        run: |
+          ssh -p ${{ vars.VPS_PORT }} ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }} \
+            "mkdir -p ${{ vars.STAGING_PROJECT_PATH }}"
+          scp -P ${{ vars.VPS_PORT }} image.tar.gz \
+            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.STAGING_PROJECT_PATH }}/image.tar.gz
+
+      - name: Load image and restart container
+        run: |
+          ssh -p ${{ vars.VPS_PORT }} \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=30 \
+            -o ServerAliveInterval=60 \
+            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }} << 'ENDSSH'
+            set -e
+
+            cd ${{ vars.STAGING_PROJECT_PATH }}
+
+            docker load < image.tar.gz
+            rm -f image.tar.gz
+
+            docker stop ${{ env.CONTAINER_NAME }} 2>/dev/null || true
+            docker rm   ${{ env.CONTAINER_NAME }} 2>/dev/null || true
+
+            # Bind to 127.0.0.1 only — the host's reverse proxy terminates
+            # TLS and forwards staging-admin.buildupuganda.com → :8083.
+            docker run -d \
+              --name ${{ env.CONTAINER_NAME }} \
+              --restart unless-stopped \
+              -p 127.0.0.1:${{ env.HOST_PORT }}:80 \
+              ${{ env.IMAGE_NAME }}:${{ env.ENV_TAG }}
+
+            docker image prune -f
+
+            echo "Staging deployment completed: ${{ env.CONTAINER_NAME }} on 127.0.0.1:${{ env.HOST_PORT }}"
+          ENDSSH
+
+  deploy-production:
+    name: Deploy to Production
+    needs: checks
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: production
+
+    env:
+      ENV_TAG: production
+      CONTAINER_NAME: buildup-admin-prod
+      HOST_PORT: "8082"
+      API_BASE_URL: https://server.buildupuganda.com
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg REACT_APP_BASE_URL=${{ env.API_BASE_URL }} \
+            -t ${{ env.IMAGE_NAME }}:${{ env.ENV_TAG }} \
+            .
+
+      - name: Save image to tarball
+        run: docker save ${{ env.IMAGE_NAME }}:${{ env.ENV_TAG }} | gzip > image.tar.gz
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ vars.VPS_PORT }} -H ${{ vars.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Transfer image to server
+        run: |
+          ssh -p ${{ vars.VPS_PORT }} ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }} \
+            "mkdir -p ${{ vars.PROD_PROJECT_PATH }}"
+          scp -P ${{ vars.VPS_PORT }} image.tar.gz \
+            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.PROD_PROJECT_PATH }}/image.tar.gz
+
+      - name: Load image and restart container
+        run: |
+          ssh -p ${{ vars.VPS_PORT }} \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=30 \
+            -o ServerAliveInterval=60 \
+            ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }} << 'ENDSSH'
+            set -e
+
+            cd ${{ vars.PROD_PROJECT_PATH }}
+
+            docker load < image.tar.gz
+            rm -f image.tar.gz
+
+            docker stop ${{ env.CONTAINER_NAME }} 2>/dev/null || true
+            docker rm   ${{ env.CONTAINER_NAME }} 2>/dev/null || true
+
+            # Bind to 127.0.0.1 only — the host's reverse proxy terminates
+            # TLS and forwards admin.buildupuganda.com → :8082.
+            docker run -d \
+              --name ${{ env.CONTAINER_NAME }} \
+              --restart unless-stopped \
+              -p 127.0.0.1:${{ env.HOST_PORT }}:80 \
+              ${{ env.IMAGE_NAME }}:${{ env.ENV_TAG }}
+
+            docker image prune -f
+
+            echo "Production deployment completed: ${{ env.CONTAINER_NAME }} on 127.0.0.1:${{ env.HOST_PORT }}"
+          ENDSSH

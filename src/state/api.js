@@ -141,6 +141,37 @@ export const api = createApi({
       query: () => `get/consultants`,
       providesTags: ["Supplier"],
     }),
+  
+  // ── Admin Revenue ────────────────────────────────────────────────────────
+ 
+    // Summary stats: wallet balances + escrow overview
+    getRevenueStats: build.query({
+      query: () => `admin-revenue/stats`,
+      providesTags: ["Revenue"],
+    }),
+ 
+    // Paginated list of all escrows with fee info
+    getEscrowFees: build.query({
+      query: (status = "") =>
+        status ? `admin-revenue/escrow-fees?status=${status}` : `admin-revenue/escrow-fees`,
+      providesTags: ["EscrowFees"],
+    }),
+ 
+    // Admin wallet transaction history
+    getWalletTransactions: build.query({
+      query: () => `admin-revenue/transactions`,
+      providesTags: ["WalletTransactions"],
+    }),
+ 
+    // Admin initiates a withdrawal to mobile money
+    initiateAdminWithdrawal: build.mutation({
+      query: (body) => ({
+        url: `admin-revenue/withdraw`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Revenue", "WalletTransactions"],
+    }),
   }),
 });
 
@@ -166,4 +197,9 @@ export const {
   useGetSupplierDealsQuery,
   useGetSupplierDealsBySupplierIdQuery,
   useAddDealMutation,
+    // Revenue hooks
+  useGetRevenueStatsQuery,
+  useGetEscrowFeesQuery,
+  useGetWalletTransactionsQuery,
+  useInitiateAdminWithdrawalMutation,
 } = api;

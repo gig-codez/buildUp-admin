@@ -8,6 +8,10 @@ import me from "assets/me.jpg";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
+ 
+
 const navItems = [
     { text: "Dashboard", icon: <HomeOutlined /> },
     { text: "PARTICIPANTS", icon: null },
@@ -21,7 +25,9 @@ const navItems = [
     { text: "Supplier Types", icon: <PointOfSaleOutlined /> },
     { text: "Supplier Deals", icon: <HandshakeIcon/> },
     { text: "Roles", icon: <TodayOutlined /> },
-
+    { text: "REVENUE", icon: null },
+    { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon /> },
+    { text: "Admin Withdraw", icon: <SavingsOutlinedIcon /> },
     
 ];
 

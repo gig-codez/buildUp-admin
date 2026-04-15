@@ -22,6 +22,9 @@ import Professional from "scenes/profesional";
 import SupplierTypes from "scenes/suppliertype";
 import Deals from "scenes/deals";
 
+import EscrowFees from "scenes/escrowFees";
+import AdminWithdraw from "scenes/adminWithdraw";
+
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -80,6 +83,14 @@ function App() {
               <Route
                 path="/supplierdeals"
                 element={<PrivateRoute element={<Deals />} />}
+              />
+              <Route
+                path="/escrowfees"
+                element={<PrivateRoute element={<EscrowFees />} />}
+              />
+              <Route
+                path="/adminwithdraw"
+                element={<PrivateRoute element={<AdminWithdraw />} />}
               />
             </Route>
           </Routes>

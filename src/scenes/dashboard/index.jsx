@@ -1,9 +1,11 @@
 import React from 'react'
 
-import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery } from 'state/api'
+import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery, useGetRevenueStatsQuery } from 'state/api'
 import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
 import { PointOfSaleOutlined,Groups2Outlined, BuildOutlined,ReceiptLongOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import { Box, useTheme, useMediaQuery } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import StatBox from 'components/StatBox'
@@ -18,6 +20,7 @@ const Dashboard = () => {
   const { data: contractorsdata } = useGetContractorsQuery();
   const { data: categorydata, isLoading: categoryLoadingData } = useGetCategoryQuery();
   const { data: dealsData } = useGetDealsQuery();
+  const { data: revenueStats } = useGetRevenueStatsQuery();
 
   //length
   const supplierlength = suplierdata?.data?.length
@@ -25,7 +28,12 @@ const Dashboard = () => {
   const clientslength = clientsdata?.employers?.length
   const contractorslength = contractorsdata?.data?.length
   const categorydatalength=categorydata?.length
-   const deallength = dealsData?.deals?.length
+  const deallength = dealsData?.deals?.length
+
+  // revenue
+  const availableBalance = revenueStats?.wallet?.available_balance
+  const totalFeesEarned = revenueStats?.wallet?.total_fees_earned
+  const formatUGX = (val) => val !== undefined ? `UGX ${Number(val).toLocaleString()}` : '...'
 
   const isNonMediumScreens = useMediaQuery("(min-width:1200px)");
   const theme = useTheme();
@@ -108,16 +116,36 @@ const Dashboard = () => {
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
-        /><StatBox
-        title="Supplier Types "
-        value={categorydatalength}
-        icon={
-          <PointOfSaleOutlined 
-            sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-          />
-        }
-      />
-        
+        />
+        <StatBox
+          title="Supplier Types"
+          value={categorydatalength}
+          icon={
+            <PointOfSaleOutlined
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+        />
+        <StatBox
+          title="Total Fees Earned"
+          value={formatUGX(totalFeesEarned)}
+          icon={
+            <MonetizationOnOutlinedIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Platform escrow revenue"
+        />
+        <StatBox
+          title="Available Balance"
+          value={formatUGX(availableBalance)}
+          icon={
+            <AccountBalanceWalletOutlinedIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Ready to withdraw"
+        />
 
         {/* ROW 2 */}
         <Box

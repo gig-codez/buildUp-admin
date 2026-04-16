@@ -237,8 +237,8 @@ const AdminWithdraw = () => {
               onChange={handleChange}
               label="Mobile Money Provider"
             >
-              <MenuItem value="MTN">MTN Mobile Money</MenuItem>
-              <MenuItem value="AIRTEL">Airtel Money</MenuItem>
+              <MenuItem value="MTN_UGANDA">MTN Mobile Money</MenuItem>
+              <MenuItem value="AIRTEL_UGANDA">Airtel Money</MenuItem>
             </Select>
           </FormControl>
 

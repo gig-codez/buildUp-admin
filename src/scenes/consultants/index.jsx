@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, useTheme, Switch } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useGetConsutantsQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
+import { useGetConsultantsQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
 import Header from 'components/Header';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -20,7 +20,7 @@ const BlackSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const Consultants = () => {
-  const { data, isLoading } = useGetConsutantsQuery();
+  const { data, isLoading } = useGetConsultantsQuery();
   const [activateUser] = useActivateUserMutation();
   const [deactivateUser] = useDeactivateUserMutation();
   const theme = useTheme();

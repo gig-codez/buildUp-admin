@@ -7,10 +7,11 @@ import FlexBetween from './FlexBetween';
 import me from "assets/me.jpg";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HandshakeIcon from '@mui/icons-material/Handshake';
-
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
- 
+
 
 const navItems = [
     { text: "Dashboard", icon: <HomeOutlined /> },
@@ -21,14 +22,17 @@ const navItems = [
     { text: "Contractors", icon: <BuildOutlined /> },
     { text: "Consultants", icon: <LocalOfferIcon/> },
     { text: "Professional", icon: <WorkOutline /> },
+    { text: "COMMUNICATION", icon: null },
+    { text: "Contact Requests", icon: <ConnectWithoutContactIcon /> },
     { text: "CATEGORIES", icon: null },
     { text: "Supplier Types", icon: <PointOfSaleOutlined /> },
     { text: "Supplier Deals", icon: <HandshakeIcon/> },
+    { text: "Orders", icon: <Inventory2OutlinedIcon /> },
     { text: "Roles", icon: <TodayOutlined /> },
     { text: "REVENUE", icon: null },
     { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon /> },
     { text: "Admin Withdraw", icon: <SavingsOutlinedIcon /> },
-    
+
 ];
 
 const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth }) => {

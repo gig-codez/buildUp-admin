@@ -1,11 +1,13 @@
 import React from 'react'
 
-import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery, useGetRevenueStatsQuery } from 'state/api'
+import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery, useGetRevenueStatsQuery, useGetContactRequestsQuery, useGetAllOrdersQuery } from 'state/api'
 import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
 import { PointOfSaleOutlined,Groups2Outlined, BuildOutlined,ReceiptLongOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { Box, useTheme, useMediaQuery } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import StatBox from 'components/StatBox'
@@ -21,6 +23,8 @@ const Dashboard = () => {
   const { data: categorydata, isLoading: categoryLoadingData } = useGetCategoryQuery();
   const { data: dealsData } = useGetDealsQuery();
   const { data: revenueStats } = useGetRevenueStatsQuery();
+  const { data: contactRequestsData } = useGetContactRequestsQuery("pending");
+  const { data: ordersData } = useGetAllOrdersQuery("pending");
 
   //length
   const supplierlength = suplierdata?.data?.length
@@ -34,6 +38,10 @@ const Dashboard = () => {
   const availableBalance = revenueStats?.wallet?.available_balance
   const totalFeesEarned = revenueStats?.wallet?.total_fees_earned
   const formatUGX = (val) => val !== undefined ? `UGX ${Number(val).toLocaleString()}` : '...'
+
+  // communication & orders
+  const pendingContactRequests = contactRequestsData?.data?.length ?? 0
+  const pendingOrders = ordersData?.data?.length ?? 0
 
   const isNonMediumScreens = useMediaQuery("(min-width:1200px)");
   const theme = useTheme();
@@ -145,6 +153,26 @@ const Dashboard = () => {
             />
           }
           description="Ready to withdraw"
+        />
+        <StatBox
+          title="Pending Contact Requests"
+          value={pendingContactRequests}
+          icon={
+            <ConnectWithoutContactIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Awaiting admin action"
+        />
+        <StatBox
+          title="Pending Orders"
+          value={pendingOrders}
+          icon={
+            <Inventory2OutlinedIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Awaiting supplier approval"
         />
 
         {/* ROW 2 */}

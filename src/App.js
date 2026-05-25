@@ -24,6 +24,8 @@ import Deals from "scenes/deals";
 
 import EscrowFees from "scenes/escrowFees";
 import AdminWithdraw from "scenes/adminWithdraw";
+import ContactRequests from "scenes/contactRequests";
+import Orders from "scenes/orders";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -91,6 +93,14 @@ function App() {
               <Route
                 path="/adminwithdraw"
                 element={<PrivateRoute element={<AdminWithdraw />} />}
+              />
+              <Route
+                path="/contactrequests"
+                element={<PrivateRoute element={<ContactRequests />} />}
+              />
+              <Route
+                path="/orders"
+                element={<PrivateRoute element={<Orders />} />}
               />
             </Route>
           </Routes>

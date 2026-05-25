@@ -34,6 +34,14 @@ export const api = createApi({
     "Profession",
     "Suppliertypes",
     "Deals",
+    "ContactRequests",
+    "Orders",
+    "Role",
+    "account",
+    "newSupplierTypes",
+    "Revenue",
+    "EscrowFees",
+    "WalletTransactions",
   ],
   endpoints: (build) => ({
     getBusiness: build.query({
@@ -137,9 +145,9 @@ export const api = createApi({
       invalidatesTags: ["account"],
     }),
     ///consultants
-    getConsutants: build.query({
+    getConsultants: build.query({
       query: () => `get/consultants`,
-      providesTags: ["Supplier"],
+      providesTags: ["Consultants"],
     }),
   
   // ── Admin Revenue ────────────────────────────────────────────────────────
@@ -172,6 +180,36 @@ export const api = createApi({
       }),
       invalidatesTags: ["Revenue", "WalletTransactions"],
     }),
+
+    // ── Contact Requests (client → admin → contractor routing) ────────────
+    getContactRequests: build.query({
+      query: (status = "") =>
+        status ? `admin/contact-requests?status=${status}` : `admin/contact-requests`,
+      providesTags: ["ContactRequests"],
+    }),
+    updateContactRequestStatus: build.mutation({
+      query: ({ id, status, adminNote }) => ({
+        url: `admin/contact-requests/${id}/status`,
+        method: "PATCH",
+        body: { status, adminNote },
+      }),
+      invalidatesTags: ["ContactRequests"],
+    }),
+
+    // ── Orders (all platform orders) ──────────────────────────────────────
+    getAllOrders: build.query({
+      query: (status = "") =>
+        status ? `orders/all?status=${status}` : `orders/all`,
+      providesTags: ["Orders"],
+    }),
+    updateOrderStatus: build.mutation({
+      query: ({ id, status }) => ({
+        url: `orders/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["Orders"],
+    }),
   }),
 });
 
@@ -193,13 +231,14 @@ export const {
   useGetDealsQuery,
   useActivateUserMutation,
   useDeactivateUserMutation,
-  useGetConsutantsQuery,
-  useGetSupplierDealsQuery,
-  useGetSupplierDealsBySupplierIdQuery,
-  useAddDealMutation,
+  useGetConsultantsQuery,
     // Revenue hooks
   useGetRevenueStatsQuery,
   useGetEscrowFeesQuery,
   useGetWalletTransactionsQuery,
   useInitiateAdminWithdrawalMutation,
+  useGetContactRequestsQuery,
+  useUpdateContactRequestStatusMutation,
+  useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
 } = api;

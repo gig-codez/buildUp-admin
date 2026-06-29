@@ -25,6 +25,7 @@ import Deals from "scenes/deals";
 import EscrowFees from "scenes/escrowFees";
 import AdminWithdraw from "scenes/adminWithdraw";
 import ContactRequests from "scenes/contactRequests";
+import Messages from "scenes/messages";
 import Orders from "scenes/orders";
 
 function App() {
@@ -93,6 +94,10 @@ function App() {
               <Route
                 path="/adminwithdraw"
                 element={<PrivateRoute element={<AdminWithdraw />} />}
+              />
+              <Route
+                path="/messages"
+                element={<PrivateRoute element={<Messages />} />}
               />
               <Route
                 path="/contactrequests"

@@ -8,6 +8,7 @@ import me from "assets/me.jpg";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
@@ -23,6 +24,7 @@ const navItems = [
     { text: "Consultants", icon: <LocalOfferIcon/> },
     { text: "Professional", icon: <WorkOutline /> },
     { text: "COMMUNICATION", icon: null },
+    { text: "Messages", icon: <ForumOutlinedIcon /> },
     { text: "Contact Requests", icon: <ConnectWithoutContactIcon /> },
     { text: "CATEGORIES", icon: null },
     { text: "Supplier Types", icon: <PointOfSaleOutlined /> },

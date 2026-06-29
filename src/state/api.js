@@ -35,6 +35,7 @@ export const api = createApi({
     "Suppliertypes",
     "Deals",
     "ContactRequests",
+    "Messages",
     "Orders",
     "Role",
     "account",
@@ -196,6 +197,32 @@ export const api = createApi({
       invalidatesTags: ["ContactRequests"],
     }),
 
+    // ── Message Inbox (all comms route through admin) ─────────────────────
+    getAdminMessages: build.query({
+      query: ({ status = "", page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams({ page, limit });
+        if (status) params.set("status", status);
+        return `admin/messages?${params}`;
+      },
+      providesTags: ["Messages"],
+    }),
+    forwardMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/messages/${id}/forward`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["Messages"],
+    }),
+    rejectMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/messages/${id}/reject`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["Messages"],
+    }),
+
     // ── Orders (all platform orders) ──────────────────────────────────────
     getAllOrders: build.query({
       query: (status = "") =>
@@ -241,4 +268,7 @@ export const {
   useUpdateContactRequestStatusMutation,
   useGetAllOrdersQuery,
   useUpdateOrderStatusMutation,
+  useGetAdminMessagesQuery,
+  useForwardMessageMutation,
+  useRejectMessageMutation,
 } = api;

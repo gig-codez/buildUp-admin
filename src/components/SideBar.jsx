@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, WorkOutline, BuildOutlined } from '@mui/icons-material';
+import { SettingsOutlined, ChevronLeft, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, WorkOutline, BuildOutlined, SpaceDashboardRounded } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import ProfileBlock from './ProfileBlock';
@@ -87,59 +87,101 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                     }}
                 >
                     <Box width="100%">
-                        <Box m="1.5rem 2rem 2rem 3rem">
-                            <FlexBetween color={theme.palette.secondary.main}>
-                                <Box display="flex" alignItems="center" gap="0.5rem">
-                                    <Typography variant="h4" fontWeight="bold">
+                        <Box m="1.5rem 1.5rem 1.5rem 1.5rem">
+                            <FlexBetween>
+                                <Box display="flex" alignItems="center" gap="0.75rem">
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        sx={{
+                                            width: 36,
+                                            height: 36,
+                                            borderRadius: "10px",
+                                            backgroundColor: theme.palette.primary.main,
+                                            color: "#fff",
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                        <SpaceDashboardRounded sx={{ fontSize: 20 }} />
+                                    </Box>
+                                    <Typography variant="h5" fontWeight="bold" color={theme.palette.secondary.main}>
                                         BuildUp
                                     </Typography>
                                 </Box>
-                                {isNonMobile && (
-                                    <IconButton
-                                        onClick={() => setSidebarOpen(!isSidebarOpen)}
-                                        aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-                                    >
-                                        <ChevronLeft />
-                                    </IconButton>
-                                )}
-                                {!isNonMobile && (
-                                    <IconButton
-                                        onClick={() => setSidebarOpen(!isSidebarOpen)}
-                                        aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-                                    >
-                                        <ChevronLeft />
-                                    </IconButton>
-                                )}
+                                <IconButton
+                                    onClick={() => setSidebarOpen(!isSidebarOpen)}
+                                    aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                                    size="small"
+                                >
+                                    <ChevronLeft />
+                                </IconButton>
                             </FlexBetween>
                         </Box>
                         {/* List of Items */}
-                        <List>
+                        <List sx={{ px: "0.75rem" }}>
                             {navItems.map(({ text, icon, to }) => {
                                 if (!icon) {
                                     return (
-                                        <Typography key={text} sx={{ m: "2.5rem 0 1rem 3rem" }}>
+                                        <Typography
+                                            key={text}
+                                            sx={{
+                                                m: "1.75rem 0 0.5rem 0.75rem",
+                                                fontSize: "0.7rem",
+                                                fontWeight: 700,
+                                                letterSpacing: "0.08em",
+                                                color: theme.palette.secondary[300],
+                                            }}
+                                        >
                                             {text}
                                         </Typography>
                                     );
                                 }
                                 const isActive = pathname === to || pathname.startsWith(`${to}/`);
                                 return (
-                                    <ListItem key={text} disablePadding>
+                                    <ListItem key={text} disablePadding sx={{ mb: "0.2rem", position: "relative" }}>
+                                        {isActive && (
+                                            <Box
+                                                sx={{
+                                                    position: "absolute",
+                                                    left: 0,
+                                                    top: "20%",
+                                                    height: "60%",
+                                                    width: 3,
+                                                    borderRadius: "0 4px 4px 0",
+                                                    backgroundColor: activeColor,
+                                                }}
+                                            />
+                                        )}
                                         <ListItemButton
                                             onClick={() => navigate(to)}
                                             sx={{
+                                                borderRadius: "10px",
+                                                py: "0.55rem",
                                                 backgroundColor: isActive ? activeBg : "transparent",
                                                 color: isActive ? activeColor : theme.palette.secondary[200],
+                                                transition: "background-color 150ms ease, color 150ms ease",
+                                                "&:hover": {
+                                                    backgroundColor: isActive
+                                                        ? activeBg
+                                                        : theme.palette.action.hover,
+                                                },
                                             }}
                                         >
                                             <ListItemIcon sx={{
-                                                ml: "2rem",
-                                                color: isActive ? activeColor : theme.palette.secondary[200]
+                                                minWidth: "40px",
+                                                color: isActive ? activeColor : theme.palette.secondary[200],
+                                                "& svg": { fontSize: "1.3rem" },
                                             }}>
                                                 {icon}
                                             </ListItemIcon>
-                                            <ListItemText primary={text} />
-                                            {isActive && (<ChevronRightOutlined sx={{ ml: "auto" }} />)}
+                                            <ListItemText
+                                                primary={text}
+                                                primaryTypographyProps={{
+                                                    fontSize: "0.875rem",
+                                                    fontWeight: isActive ? 600 : 500,
+                                                }}
+                                            />
                                         </ListItemButton>
                                     </ListItem>
                                 );

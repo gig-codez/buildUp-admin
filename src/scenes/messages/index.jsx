@@ -105,7 +105,17 @@ function MessageCard({ msg, onForward, onReject }) {
                   />
                 ) : (
                   <Typography variant="body2">
-                    <a href={msg.media_url} target="_blank" rel="noreferrer" style={{ color: theme.palette.primary.main }}>
+                    <a
+                      href={msg.media_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        color:
+                          theme.palette.mode === "dark"
+                            ? theme.palette.primary.light
+                            : theme.palette.primary.main,
+                      }}
+                    >
                       View {msg.message_type}
                     </a>
                   </Typography>

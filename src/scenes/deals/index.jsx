@@ -211,7 +211,7 @@ const modalStyle = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: (theme) => `1px solid ${theme.palette.divider}`,
   boxShadow: 24,
   p: 4,
 };

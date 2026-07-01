@@ -175,18 +175,6 @@ const Deals = () => {
       <Box
         mt="20px"
         height="100vh"
-        sx={{
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important",
-            borderLeft: "1px solid rgba(224, 224, 224, 1) !important",
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important"
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important"
-          },
-        }}
       >
         {isLoadingDeals ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100%">

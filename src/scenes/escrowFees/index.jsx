@@ -186,8 +186,8 @@ const EscrowFees = () => {
             getRowId={(row) => row._id}
             rows={escrowData?.escrows || []}
             columns={columns}
-            pageSize={20}
-            rowsPerPageOptions={[10, 20, 50]}
+            initialState={{ pagination: { paginationModel: { pageSize: 20 } } }}
+            pageSizeOptions={[10, 20, 50]}
           />
         )}
       </Box>

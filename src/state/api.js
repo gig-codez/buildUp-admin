@@ -45,6 +45,7 @@ export const api = createApi({
     "WalletTransactions",
     "Products",
     "Jobs",
+    "EscrowMessages",
   ],
   endpoints: (build) => ({
     getBusiness: build.query({
@@ -225,6 +226,32 @@ export const api = createApi({
       invalidatesTags: ["Messages"],
     }),
 
+    // ── Escrow Chat Moderation (task-chat messages route through admin) ───
+    getAdminEscrowMessages: build.query({
+      query: ({ status = "", page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams({ page, limit });
+        if (status) params.set("status", status);
+        return `admin/escrow-messages?${params}`;
+      },
+      providesTags: ["EscrowMessages"],
+    }),
+    forwardEscrowMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/escrow-messages/${id}/forward`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["EscrowMessages"],
+    }),
+    rejectEscrowMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/escrow-messages/${id}/reject`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["EscrowMessages"],
+    }),
+
     // ── Orders (all platform orders) ──────────────────────────────────────
     getAllOrders: build.query({
       query: (status = "") =>
@@ -294,6 +321,9 @@ export const {
   useGetAdminMessagesQuery,
   useForwardMessageMutation,
   useRejectMessageMutation,
+  useGetAdminEscrowMessagesQuery,
+  useForwardEscrowMessageMutation,
+  useRejectEscrowMessageMutation,
   useGetAllProductsQuery,
   useGetAllAdminJobsQuery,
 } = api;

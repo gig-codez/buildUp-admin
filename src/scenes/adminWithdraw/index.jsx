@@ -273,8 +273,8 @@ const AdminWithdraw = () => {
               getRowId={(row) => row._id}
               rows={txData?.transactions || []}
               columns={txColumns}
-              pageSize={20}
-              rowsPerPageOptions={[10, 20, 50]}
+              initialState={{ pagination: { paginationModel: { pageSize: 20 } } }}
+              pageSizeOptions={[10, 20, 50]}
             />
           )}
         </Box>

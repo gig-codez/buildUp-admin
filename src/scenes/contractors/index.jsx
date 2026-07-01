@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Avatar } from '@mui/material';
 import {useGetContractorsQuery } from 'state/api';
 import Header from 'components/Header';
+import RecordDetailDialog from 'components/RecordDetailDialog';
 import { DataGrid } from '@mui/x-data-grid';
 
 
@@ -19,11 +20,11 @@ const columns = [
   { field: "email", headerName: "Email", flex: 1 },
   { field: "gender", headerName: "Gender", flex: 0.5 },
   { field: "address", headerName: "Address", flex: 0.5 },
-  { 
-    field: "tel_num", 
-    headerName: "Phone Number", 
+  {
+    field: "tel_num",
+    headerName: "Phone Number",
     flex: 1,
-   
+
   },
   { field: "profession", headerName: "Profession", flex: 1,
     renderCell:(params)=>{
@@ -32,33 +33,42 @@ const columns = [
    },
 ];
 
+const DETAIL_FIELDS = [
+  { key: 'first_name' },
+  { key: 'last_name' },
+  { key: 'email' },
+  { key: 'tel_num', label: 'Phone Number' },
+  { key: 'gender' },
+  { key: 'address' },
+  { key: 'profession', format: (v) => v?.name || 'N/A' },
+];
+
 const Contractors = () => {
   const { data, isLoading } =useGetContractorsQuery();
   const contractor_data=data?.data
+  const [selectedRow, setSelectedRow] = useState(null);
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="CONTRACTORS" subtitle="List of contractors" />
-      <Box mt="40px" height="100vh"
-       sx={{
-        "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-          borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-          borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
-        },
-        "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-          borderLeft: "none !important" // Remove left border for first column
-        },
-        "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-          borderRight: "none !important" // Remove right border for last column
-        },
-      }}
-      >
+      <Box mt="40px" height="100vh">
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
           rows={contractor_data || []}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow ? `${selectedRow.first_name || ''} ${selectedRow.last_name || ''}`.trim() : ''}
+        subtitle="Contractor details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+        imageField="profile_pic"
+      />
     </Box>
   );
 }

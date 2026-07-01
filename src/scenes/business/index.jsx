@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import { useGetBusinessQuery } from 'state/api';
 import Header from 'components/Header';
+import RecordDetailDialog from 'components/RecordDetailDialog';
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
@@ -45,33 +46,41 @@ const columns = [
   }
 ];
 
+const DETAIL_FIELDS = [
+  { key: 'business_name' },
+  { key: 'business_email' },
+  { key: 'tin_number', label: 'TIN Number' },
+  { key: 'business_tel', label: 'Business Tel' },
+  { key: 'address' },
+  { key: 'employer', format: (v) => (v ? `${v.first_name || ''} ${v.last_name || ''}`.trim() : 'N/A') },
+  { key: 'about_business', label: 'About Business', fullWidth: true },
+];
+
 const Business = () => {
   const { data, isLoading } = useGetBusinessQuery();
   const businessArray = data?.data;
+  const [selectedRow, setSelectedRow] = useState(null);
 
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="Business" subtitle="List of Businesses" />
-      <Box mt="40px" height="100vh"
-        sx={{
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-            borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important" // Remove left border for first column
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important" // Remove right border for last column
-          },
-        }}
-      >
+      <Box mt="40px" height="100vh">
         <DataGrid loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
           rows={businessArray || []}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow?.business_name}
+        subtitle="Business details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+      />
     </Box>
   );
 };

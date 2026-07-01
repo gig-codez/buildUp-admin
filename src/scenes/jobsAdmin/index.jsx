@@ -9,7 +9,19 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
 import Header from "components/Header";
+import RecordDetailDialog from "components/RecordDetailDialog";
 import { useGetAllAdminJobsQuery } from "state/api";
+
+const DETAIL_FIELDS = [
+  { key: "job_title", label: "Job Title" },
+  { key: "job_category", label: "Category" },
+  { key: "profession", format: (v) => v?.name || "—" },
+  { key: "project_fees", label: "Budget (UGX)", format: (v) => (v != null ? Number(v).toLocaleString() : "—") },
+  { key: "contract_status", label: "Status" },
+  { key: "escrow_enabled", label: "Escrow", format: (v) => (v ? "Yes" : "No") },
+  { key: "createdAt", label: "Posted", format: (v) => (v ? new Date(v).toLocaleDateString() : "—") },
+  { key: "skills_required", label: "Skills", fullWidth: true },
+];
 
 const JOB_CATEGORIES = [
   "All",
@@ -46,6 +58,7 @@ const JobsAdmin = () => {
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
   const [search, setSearch] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const { data, isLoading } = useGetAllAdminJobsQuery({ category, status });
 
@@ -186,8 +199,18 @@ const JobsAdmin = () => {
           rows={rows}
           columns={columns}
           rowHeight={56}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow?.job_title}
+        subtitle="Job details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+      />
     </Box>
   );
 };

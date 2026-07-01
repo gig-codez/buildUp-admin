@@ -154,19 +154,7 @@ const Professional = () => {
 
       <Box
         mt="20px"
-        height="100vh" // Adjusted height
-        sx={{
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-            borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important" // Remove left border for first column
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important" // Remove right border for last column
-          },
-        }}
+        height="100vh"
       >
         {isLoading ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100%">

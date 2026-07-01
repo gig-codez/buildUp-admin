@@ -10,7 +10,18 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
 import Header from "components/Header";
+import RecordDetailDialog from "components/RecordDetailDialog";
 import { useGetAllProductsQuery } from "state/api";
+
+const DETAIL_FIELDS = [
+  { key: "product_name", label: "Product" },
+  { key: "category" },
+  { key: "product_price", label: "Price (UGX)", format: (v) => (v != null ? Number(v).toLocaleString() : "—") },
+  { key: "product_quantity", label: "Qty" },
+  { key: "unit" },
+  { key: "status" },
+  { key: "variants", fullWidth: true },
+];
 
 const PRODUCT_CATEGORIES = [
   "All",
@@ -34,6 +45,7 @@ const PRODUCT_CATEGORIES = [
 const Products = () => {
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const { data, isLoading } = useGetAllProductsQuery({ category });
 
@@ -162,8 +174,19 @@ const Products = () => {
           rows={rows}
           columns={columns}
           rowHeight={56}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow?.product_name}
+        subtitle="Product details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+        imageField="product_image"
+      />
     </Box>
   );
 };

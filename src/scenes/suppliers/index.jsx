@@ -2,7 +2,18 @@ import React, { useState } from 'react';
 import { Box, Switch } from '@mui/material';
 import { useGetSuppliersQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
 import Header from 'components/Header'; // Ensure this path is correct
+import RecordDetailDialog from 'components/RecordDetailDialog';
 import { DataGrid } from '@mui/x-data-grid';
+
+const DETAIL_FIELDS = [
+  { key: 'business_name' },
+  { key: 'business_email_address', label: 'Email' },
+  { key: 'TIN' },
+  { key: 'balance' },
+  { key: 'business_tel', label: 'Phone Number' },
+  { key: 'supplier_type', label: 'Supplier Type', format: (v) => v?.name || '—' },
+  { key: 'active', format: (v) => (v ? 'Active' : 'Inactive') },
+];
 
 const Suppliers = () => {
   const { data, isLoading } = useGetSuppliersQuery();
@@ -11,6 +22,7 @@ const Suppliers = () => {
   const supplier_data = data?.data;
 
   const [localSwitchState, setLocalSwitchState] = useState({});
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const handleToggle = async (id, newState) => {
     setLocalSwitchState(prevState => ({ ...prevState, [id]: newState }));
@@ -53,14 +65,16 @@ const Suppliers = () => {
       headerName: "Phone Number",
       flex: 1,
       renderCell: (params) => {
-        return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+        return params.value
+          ? params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")
+          : "—";
       },
     },
     {
       field: "supplier_type",
       headerName: "Supplier Type",
       flex: 1,
-      valueGetter: (params) => params.row.supplier_type.name,
+      valueGetter: (params) => params.row.supplier_type?.name || "—",
     },
     {
       field: "active",
@@ -71,6 +85,7 @@ const Suppliers = () => {
         return (
           <Switch
             checked={isActive}
+            onClick={(e) => e.stopPropagation()}
             onChange={() => handleToggle(params.row._id, !isActive)}
           />
         );
@@ -84,25 +99,24 @@ const Suppliers = () => {
       <Box
         mt="40px"
         height="100vh"
-        sx={{
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important" // Remove left border for first column
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important" // Remove right border for last column
-          },
-        }}
       >
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
           rows={supplier_data || []}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow?.business_name}
+        subtitle="Supplier details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+      />
     </Box>
   );
 };

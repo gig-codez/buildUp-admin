@@ -27,6 +27,8 @@ import AdminWithdraw from "scenes/adminWithdraw";
 import ContactRequests from "scenes/contactRequests";
 import Messages from "scenes/messages";
 import Orders from "scenes/orders";
+import Products from "scenes/products";
+import JobsAdmin from "scenes/jobsAdmin";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -106,6 +108,14 @@ function App() {
               <Route
                 path="/orders"
                 element={<PrivateRoute element={<Orders />} />}
+              />
+              <Route
+                path="/products"
+                element={<PrivateRoute element={<Products />} />}
+              />
+              <Route
+                path="/jobs"
+                element={<PrivateRoute element={<JobsAdmin />} />}
               />
             </Route>
           </Routes>

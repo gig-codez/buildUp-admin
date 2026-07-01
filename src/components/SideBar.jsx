@@ -12,6 +12,8 @@ import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 
 const navItems = [
@@ -26,10 +28,13 @@ const navItems = [
     { text: "COMMUNICATION", icon: null },
     { text: "Messages", icon: <ForumOutlinedIcon /> },
     { text: "Contact Requests", icon: <ConnectWithoutContactIcon /> },
+    { text: "MARKETPLACE", icon: null },
+    { text: "Products", icon: <StorefrontOutlinedIcon /> },
+    { text: "Jobs", icon: <WorkOutlineIcon /> },
+    { text: "Orders", icon: <Inventory2OutlinedIcon /> },
     { text: "CATEGORIES", icon: null },
     { text: "Supplier Types", icon: <PointOfSaleOutlined /> },
     { text: "Supplier Deals", icon: <HandshakeIcon/> },
-    { text: "Orders", icon: <Inventory2OutlinedIcon /> },
     { text: "Roles", icon: <TodayOutlined /> },
     { text: "REVENUE", icon: null },
     { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon /> },

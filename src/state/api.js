@@ -43,6 +43,8 @@ export const api = createApi({
     "Revenue",
     "EscrowFees",
     "WalletTransactions",
+    "Products",
+    "Jobs",
   ],
   endpoints: (build) => ({
     getBusiness: build.query({
@@ -237,6 +239,27 @@ export const api = createApi({
       }),
       invalidatesTags: ["Orders"],
     }),
+
+    // ── Products (supplier stock with categories) ──────────────────────────
+    getAllProducts: build.query({
+      query: ({ category = "", page = 1, pageSize = 50 } = {}) => {
+        const params = new URLSearchParams({ page, pageSize });
+        if (category && category !== "All") params.set("category", category);
+        return `stock/get_stocks?${params}`;
+      },
+      providesTags: ["Products"],
+    }),
+
+    // ── Jobs (all job posts with categories) ──────────────────────────────
+    getAllAdminJobs: build.query({
+      query: ({ category = "", status = "", page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams({ page, limit });
+        if (category && category !== "All") params.set("category", category);
+        if (status && status !== "All") params.set("status", status);
+        return `get/jobs?${params}`;
+      },
+      providesTags: ["Jobs"],
+    }),
   }),
 });
 
@@ -271,4 +294,6 @@ export const {
   useGetAdminMessagesQuery,
   useForwardMessageMutation,
   useRejectMessageMutation,
+  useGetAllProductsQuery,
+  useGetAllAdminJobsQuery,
 } = api;

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import {
   Box, Typography, Tabs, Tab, Card, CardContent, CardActions,
   Button, Chip, Dialog, DialogTitle, DialogContent, DialogActions,
-  TextField, IconButton, Tooltip, CircularProgress, Avatar,
-  useTheme, Divider, Badge,
+  TextField, IconButton, Tooltip, CircularProgress,
+  useTheme, Badge,
 } from "@mui/material";
 import {
   ForwardToInbox as ForwardIcon,

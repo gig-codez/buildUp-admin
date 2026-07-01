@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, WorkOutline, BuildOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
@@ -48,6 +49,17 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const theme = useTheme();
+    const isDarkMode = theme.palette.mode === 'dark';
+    // `primary[600]`/`secondary[300]` resolve inconsistently between light/dark
+    // mode (theme.js reverses the token scale per-mode), which produced
+    // ~1.8:1 and ~3.6:1 contrast for the active nav item. `.main`/`.light` are
+    // calibrated per-mode and verified to clear 4.5:1+ in both themes.
+    const activeBg = isDarkMode
+        ? alpha(theme.palette.primary.main, 0.16)
+        : theme.palette.primary.light;
+    const activeColor = isDarkMode
+        ? theme.palette.primary.light
+        : theme.palette.primary.main;
 
     return (
         <Box component="nav">
@@ -116,13 +128,13 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                                         <ListItemButton
                                             onClick={() => navigate(to)}
                                             sx={{
-                                                backgroundColor: isActive ? theme.palette.secondary[300] : "transparent",
-                                                color: isActive ? theme.palette.primary[600] : theme.palette.secondary[200],
+                                                backgroundColor: isActive ? activeBg : "transparent",
+                                                color: isActive ? activeColor : theme.palette.secondary[200],
                                             }}
                                         >
                                             <ListItemIcon sx={{
                                                 ml: "2rem",
-                                                color: isActive ? theme.palette.primary[600] : theme.palette.secondary[200]
+                                                color: isActive ? activeColor : theme.palette.secondary[200]
                                             }}>
                                                 {icon}
                                             </ListItemIcon>

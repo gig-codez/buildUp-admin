@@ -34,14 +34,11 @@ const navItems = [
     { text: "Products", icon: <StorefrontOutlinedIcon />, to: "/products" },
     { text: "Jobs", icon: <WorkOutlineIcon />, to: "/jobs" },
     { text: "Orders", icon: <Inventory2OutlinedIcon />, to: "/orders" },
-    { text: "CATEGORIES", icon: null },
-    { text: "Category Types", icon: <PointOfSaleOutlined />, to: "/categoryTypes" },
-    { text: "Supplier Types", icon: <PointOfSaleOutlined />, to: "/suppliertypes" },
-    { text: "Supplier Deals", icon: <HandshakeIcon/>, to: "/supplierdeals" },
-    { text: "Roles", icon: <TodayOutlined />, to: "/roles" },
+    { text: "REVENUE", icon: null },
     { text: "REVENUE", icon: null },
     { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon />, to: "/escrowfees" },
     { text: "Admin Withdraw", icon: <SavingsOutlinedIcon />, to: "/adminwithdraw" },
+
 
 ];
 

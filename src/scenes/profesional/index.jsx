@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Button, Modal, TextField, Typography, useTheme, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Box, Button, Modal, TextField, Typography, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import { toast } from 'react-toastify';
 import { useGetProfessionQuery, useCreateProfessionMutation, useDeleteProfessionMutation } from 'state/api';
 import Header from 'components/Header';
 
 const Professional = () => {
-  const theme = useTheme();
   const { data, isLoading } = useGetProfessionQuery();
-  const [createProfession] = useCreateProfessionMutation();
-  const [deleteProfession] = useDeleteProfessionMutation();
+  const [createProfession, { isLoading: isCreating }] = useCreateProfessionMutation();
+  const [deleteProfession, { isLoading: isDeleting }] = useDeleteProfessionMutation();
 
   const [open, setOpen] = useState(false);
   const [newProfession, setNewProfession] = useState({ name: '' });
+  const [nameError, setNameError] = useState('');
   const [deleteId, setDeleteId] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -19,6 +20,7 @@ const Professional = () => {
   const handleClose = () => {
     setOpen(false);
     setNewProfession({ name: '' });
+    setNameError('');
   };
 
   const handleChange = (e) => {
@@ -27,11 +29,24 @@ const Professional = () => {
       ...prevState,
       [name]: value,
     }));
+    if (name === 'name' && value.trim()) {
+      setNameError('');
+    }
   };
 
   const handleSubmit = async () => {
-    await createProfession(newProfession);
-    handleClose();
+    if (!newProfession.name.trim()) {
+      setNameError('Profession name is required.');
+      return;
+    }
+
+    try {
+      await createProfession(newProfession).unwrap();
+      toast.success('Profession added successfully.');
+      handleClose();
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to add profession.');
+    }
   };
 
   const handleDeleteClick = (id) => {
@@ -40,9 +55,14 @@ const Professional = () => {
   };
 
   const handleDeleteConfirm = async () => {
-    await deleteProfession(deleteId);
-    setConfirmOpen(false);
-    setDeleteId(null);
+    try {
+      await deleteProfession(deleteId).unwrap();
+      toast.success('Profession deleted successfully.');
+      setConfirmOpen(false);
+      setDeleteId(null);
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to delete profession.');
+    }
   };
 
   const handleDeleteCancel = () => {
@@ -96,6 +116,8 @@ const Professional = () => {
             autoFocus
             value={newProfession.name}
             onChange={handleChange}
+            error={!!nameError}
+            helperText={nameError}
           />
           <Button
             type="submit"
@@ -103,8 +125,9 @@ const Professional = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             onClick={handleSubmit}
+            disabled={isCreating}
           >
-            Add
+            {isCreating ? <CircularProgress size={20} color="inherit" /> : 'Add'}
           </Button>
         </Box>
       </Modal>
@@ -120,11 +143,11 @@ const Professional = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
+          <Button onClick={handleDeleteCancel} color="primary" disabled={isDeleting}>
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="secondary" autoFocus>
-            Delete
+          <Button onClick={handleDeleteConfirm} color="secondary" autoFocus disabled={isDeleting}>
+            {isDeleting ? <CircularProgress size={20} color="inherit" /> : 'Delete'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -133,36 +156,15 @@ const Professional = () => {
         mt="20px"
         height="100vh" // Adjusted height
         sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            
-            fontWeight: 'bold', // Make header text bold
-          },
           "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
             borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
             borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
-           
           },
           "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
             borderLeft: "none !important" // Remove left border for first column
           },
           "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
             borderRight: "none !important" // Remove right border for last column
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
           },
         }}
       >

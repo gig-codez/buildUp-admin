@@ -9,9 +9,9 @@ import {
   DialogActions,
   TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { toast } from "react-toastify";
 import Header from "components/Header";
 import {
   useGetContactRequestsQuery,
@@ -28,7 +28,6 @@ const statusColor = (status) => {
 };
 
 const ContactRequests = () => {
-  const theme = useTheme();
   const [statusFilter, setStatusFilter] = useState("");
   const [selected, setSelected] = useState(null);
   const [adminNote, setAdminNote] = useState("");
@@ -48,14 +47,23 @@ const ContactRequests = () => {
 
   const handleConfirm = async () => {
     if (!selected) return;
-    await updateStatus({
-      id: selected._id,
-      status: dialogAction,
-      adminNote,
-    });
-    setSelected(null);
-    setDialogAction(null);
-    refetch();
+    try {
+      await updateStatus({
+        id: selected._id,
+        status: dialogAction,
+        adminNote,
+      }).unwrap();
+      toast.success(
+        dialogAction === "connected"
+          ? "Parties connected successfully."
+          : "Request rejected."
+      );
+      setSelected(null);
+      setDialogAction(null);
+      refetch();
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to update contact request.");
+    }
   };
 
   const columns = [
@@ -120,24 +128,6 @@ const ContactRequests = () => {
     },
   ];
 
-  const gridSx = {
-    "& .MuiDataGrid-root": { border: "none" },
-    "& .MuiDataGrid-cell": { borderBottom: "none" },
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderBottom: "none",
-    },
-    "& .MuiDataGrid-virtualScroller": {
-      backgroundColor: theme.palette.primary.light,
-    },
-    "& .MuiDataGrid-footerContainer": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderTop: "none",
-    },
-  };
-
   return (
     <Box m="1.5rem 2.5rem">
       <Header
@@ -158,7 +148,7 @@ const ContactRequests = () => {
         ))}
       </Box>
 
-      <Box height="75vh" sx={gridSx}>
+      <Box height="75vh">
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}

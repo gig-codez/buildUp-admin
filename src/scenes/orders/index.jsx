@@ -6,11 +6,11 @@ import {
   Typography,
   Collapse,
   IconButton,
-  useTheme,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { toast } from "react-toastify";
 import Header from "components/Header";
 import { useGetAllOrdersQuery, useUpdateOrderStatusMutation } from "state/api";
 
@@ -50,7 +50,6 @@ const OrderDetailPanel = ({ order }) => {
 };
 
 const Orders = () => {
-  const theme = useTheme();
   const [statusFilter, setStatusFilter] = useState("");
   const [expandedRow, setExpandedRow] = useState(null);
 
@@ -60,8 +59,13 @@ const Orders = () => {
   const rows = data?.data || [];
 
   const handleStatusUpdate = async (id, newStatus) => {
-    await updateStatus({ id, status: newStatus });
-    refetch();
+    try {
+      await updateStatus({ id, status: newStatus }).unwrap();
+      toast.success(`Order marked as ${newStatus}.`);
+      refetch();
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to update order status.");
+    }
   };
 
   const columns = [
@@ -73,6 +77,7 @@ const Orders = () => {
       renderCell: (p) => (
         <IconButton
           size="small"
+          aria-label="View order details"
           onClick={() =>
             setExpandedRow(expandedRow === p.row._id ? null : p.row._id)
           }
@@ -169,24 +174,6 @@ const Orders = () => {
     },
   ];
 
-  const gridSx = {
-    "& .MuiDataGrid-root": { border: "none" },
-    "& .MuiDataGrid-cell": { borderBottom: "none" },
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderBottom: "none",
-    },
-    "& .MuiDataGrid-virtualScroller": {
-      backgroundColor: theme.palette.primary.light,
-    },
-    "& .MuiDataGrid-footerContainer": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderTop: "none",
-    },
-  };
-
   return (
     <Box m="1.5rem 2.5rem">
       <Header
@@ -207,7 +194,7 @@ const Orders = () => {
         ))}
       </Box>
 
-      <Box height="75vh" sx={gridSx}>
+      <Box height="75vh">
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}

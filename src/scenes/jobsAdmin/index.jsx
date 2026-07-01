@@ -3,7 +3,6 @@ import {
   Box,
   Chip,
   Typography,
-  useTheme,
   TextField,
   InputAdornment,
 } from "@mui/material";
@@ -44,7 +43,6 @@ const statusColor = (s) => {
 };
 
 const JobsAdmin = () => {
-  const theme = useTheme();
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
   const [search, setSearch] = useState("");
@@ -127,24 +125,6 @@ const JobsAdmin = () => {
     },
   ];
 
-  const gridSx = {
-    "& .MuiDataGrid-root": { border: "none" },
-    "& .MuiDataGrid-cell": { borderBottom: "none" },
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderBottom: "none",
-    },
-    "& .MuiDataGrid-virtualScroller": {
-      backgroundColor: theme.palette.primary.light,
-    },
-    "& .MuiDataGrid-footerContainer": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderTop: "none",
-    },
-  };
-
   // Category breakdown counts
   const catCounts = JOB_CATEGORIES.slice(1).reduce((acc, cat) => {
     acc[cat] = (data?.jobs || []).filter((j) => (j.job_category || "General Construction") === cat).length;
@@ -199,7 +179,7 @@ const JobsAdmin = () => {
         }}
       />
 
-      <Box height="60vh" sx={gridSx}>
+      <Box height="60vh">
         <DataGrid
           loading={isLoading}
           getRowId={(row) => row._id}

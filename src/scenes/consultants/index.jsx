@@ -1,29 +1,13 @@
 import React, { useState } from 'react';
-import { Box, useTheme, Switch } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Switch } from '@mui/material';
 import { useGetConsultantsQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
 import Header from 'components/Header';
 import { DataGrid } from '@mui/x-data-grid';
-
-
-// Custom switch component
-const BlackSwitch = styled(Switch)(({ theme }) => ({
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: '#000',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.08)',
-    },
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#000',
-  },
-}));
 
 const Consultants = () => {
   const { data, isLoading } = useGetConsultantsQuery();
   const [activateUser] = useActivateUserMutation();
   const [deactivateUser] = useDeactivateUserMutation();
-  const theme = useTheme();
   const consultantData = data?.data|| [];
 
   const [localSwitchState, setLocalSwitchState] = useState({});
@@ -82,7 +66,7 @@ const Consultants = () => {
       renderCell: (params) => {
         const isActive = localSwitchState[params.row._id] ?? params.row.active;
         return (
-          <BlackSwitch
+          <Switch
             checked={isActive}
             onChange={() => handleToggle(params.row._id, !isActive)}
           />
@@ -96,15 +80,6 @@ const Consultants = () => {
       <Header title="CONSULTANTS" subtitle="List of consultants " />
       <Box mt="40px" height="100vh"
         sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            // Add bottom border
-            fontWeight: 'bold', // Make header text bold
-          },
           "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
             borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
             borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
@@ -114,17 +89,6 @@ const Consultants = () => {
           },
           "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
             borderRight: "none !important" // Remove right border for last column
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
           },
         }}
       >

@@ -179,31 +179,6 @@ const Dashboard = () => {
         <Box
           gridColumn="span 8"
           gridRow="span 3"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
         >
 
           <DataGrid
@@ -212,36 +187,18 @@ const Dashboard = () => {
             rows={businessdata?.data || []}
             columns={Businesscolumns}
             sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-                borderRadius: "5rem",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
+              borderRadius: "0.55rem",
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: theme.palette.primary.main,
                 color: theme.palette.primary.contrastText,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
-
                 },
                 padding: "10px 0",
               },
               "& .MuiDataGrid-columnSeparator": {
                 display: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.background.alt,
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderTop: "none",
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${theme.palette.secondary[200]} !important`,
               },
             }}
           />
@@ -259,36 +216,18 @@ const Dashboard = () => {
             columns={Categorycolumns}
             rows={categorydata || []}
             sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-                borderRadius: "5rem",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
+              borderRadius: "0.55rem",
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: theme.palette.primary.main,
                 color: theme.palette.primary.contrastText,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
-
                 },
                 padding: "10px 0",
               },
               "& .MuiDataGrid-columnSeparator": {
                 display: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.background.alt,
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderTop: "none",
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${theme.palette.secondary[200]} !important`,
               },
             }}
           />

@@ -1,28 +1,13 @@
 import React, { useState } from 'react';
-import { Box, useTheme, Switch } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Switch } from '@mui/material';
 import { useGetSuppliersQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
 import Header from 'components/Header'; // Ensure this path is correct
 import { DataGrid } from '@mui/x-data-grid';
-
-// Custom switch component
-const BlackSwitch = styled(Switch)(({ theme }) => ({
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: '#000',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.08)',
-    },
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#000',
-  },
-}));
 
 const Suppliers = () => {
   const { data, isLoading } = useGetSuppliersQuery();
   const [activateUser] = useActivateUserMutation();
   const [deactivateUser] = useDeactivateUserMutation();
-  const theme = useTheme();
   const supplier_data = data?.data;
 
   const [localSwitchState, setLocalSwitchState] = useState({});
@@ -84,7 +69,7 @@ const Suppliers = () => {
       renderCell: (params) => {
         const isActive = localSwitchState[params.row._id] ?? params.row.active;
         return (
-          <BlackSwitch
+          <Switch
             checked={isActive}
             onChange={() => handleToggle(params.row._id, !isActive)}
           />
@@ -98,17 +83,8 @@ const Suppliers = () => {
       <Header title="SUPPLIERS" subtitle="List of suppliers" />
       <Box
         mt="40px"
-        height="200vh"
+        height="100vh"
         sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderBottom: "1px solid rgba(224, 224, 224, 1)", // Add bottom border
-            fontWeight: 'bold', // Make header text bold
-          },
           "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
             borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
           },
@@ -117,17 +93,6 @@ const Suppliers = () => {
           },
           "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
             borderRight: "none !important" // Remove right border for last column
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
           },
         }}
       >

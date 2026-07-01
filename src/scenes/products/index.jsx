@@ -4,7 +4,6 @@ import {
   Chip,
   Typography,
   Avatar,
-  useTheme,
   TextField,
   InputAdornment,
 } from "@mui/material";
@@ -33,7 +32,6 @@ const PRODUCT_CATEGORIES = [
 ];
 
 const Products = () => {
-  const theme = useTheme();
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
 
@@ -117,24 +115,6 @@ const Products = () => {
     },
   ];
 
-  const gridSx = {
-    "& .MuiDataGrid-root": { border: "none" },
-    "& .MuiDataGrid-cell": { borderBottom: "none" },
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderBottom: "none",
-    },
-    "& .MuiDataGrid-virtualScroller": {
-      backgroundColor: theme.palette.primary.light,
-    },
-    "& .MuiDataGrid-footerContainer": {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderTop: "none",
-    },
-  };
-
   // Category stats
   const statsByCategory = PRODUCT_CATEGORIES.slice(1).reduce((acc, cat) => {
     acc[cat] = (data?.data || []).filter((p) => (p.category || "Other") === cat).length;
@@ -175,7 +155,7 @@ const Products = () => {
         }}
       />
 
-      <Box height="65vh" sx={gridSx}>
+      <Box height="65vh">
         <DataGrid
           loading={isLoading}
           getRowId={(row) => row._id}

@@ -1,10 +1,9 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import { SettingsOutlined, ChevronLeft, ChevronRightOutlined, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, WorkOutline, BuildOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
-import me from "assets/me.jpg";
+import ProfileBlock from './ProfileBlock';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
@@ -16,41 +15,39 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 
+// `to` mirrors the actual route paths declared in src/App.js so active-state
+// detection can compare directly against pathname instead of re-deriving it.
 const navItems = [
-    { text: "Dashboard", icon: <HomeOutlined /> },
+    { text: "Dashboard", icon: <HomeOutlined />, to: "/dashboard" },
     { text: "PARTICIPANTS", icon: null },
-    { text: "Business", icon: <ShoppingCartOutlined /> },
-    { text: "Suppliers", icon: <Groups2Outlined /> },
-    { text: "Clients", icon: <ReceiptLongOutlined /> },
-    { text: "Contractors", icon: <BuildOutlined /> },
-    { text: "Consultants", icon: <LocalOfferIcon/> },
-    { text: "Professional", icon: <WorkOutline /> },
+    { text: "Business", icon: <ShoppingCartOutlined />, to: "/business" },
+    { text: "Suppliers", icon: <Groups2Outlined />, to: "/suppliers" },
+    { text: "Clients", icon: <ReceiptLongOutlined />, to: "/clients" },
+    { text: "Contractors", icon: <BuildOutlined />, to: "/contractors" },
+    { text: "Consultants", icon: <LocalOfferIcon/>, to: "/consultants" },
+    { text: "Professional", icon: <WorkOutline />, to: "/professional" },
     { text: "COMMUNICATION", icon: null },
-    { text: "Messages", icon: <ForumOutlinedIcon /> },
-    { text: "Contact Requests", icon: <ConnectWithoutContactIcon /> },
+    { text: "Messages", icon: <ForumOutlinedIcon />, to: "/messages" },
+    { text: "Contact Requests", icon: <ConnectWithoutContactIcon />, to: "/contactrequests" },
     { text: "MARKETPLACE", icon: null },
-    { text: "Products", icon: <StorefrontOutlinedIcon /> },
-    { text: "Jobs", icon: <WorkOutlineIcon /> },
-    { text: "Orders", icon: <Inventory2OutlinedIcon /> },
+    { text: "Products", icon: <StorefrontOutlinedIcon />, to: "/products" },
+    { text: "Jobs", icon: <WorkOutlineIcon />, to: "/jobs" },
+    { text: "Orders", icon: <Inventory2OutlinedIcon />, to: "/orders" },
     { text: "CATEGORIES", icon: null },
-    { text: "Supplier Types", icon: <PointOfSaleOutlined /> },
-    { text: "Supplier Deals", icon: <HandshakeIcon/> },
-    { text: "Roles", icon: <TodayOutlined /> },
+    { text: "Category Types", icon: <PointOfSaleOutlined />, to: "/categoryTypes" },
+    { text: "Supplier Types", icon: <PointOfSaleOutlined />, to: "/suppliertypes" },
+    { text: "Supplier Deals", icon: <HandshakeIcon/>, to: "/supplierdeals" },
+    { text: "Roles", icon: <TodayOutlined />, to: "/roles" },
     { text: "REVENUE", icon: null },
-    { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon /> },
-    { text: "Admin Withdraw", icon: <SavingsOutlinedIcon /> },
+    { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon />, to: "/escrowfees" },
+    { text: "Admin Withdraw", icon: <SavingsOutlinedIcon />, to: "/adminwithdraw" },
 
 ];
 
 const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth }) => {
     const { pathname } = useLocation();
-    const [active, setActive] = useState("");
     const navigate = useNavigate();
     const theme = useTheme();
-
-    useEffect(() => {
-        setActive(pathname.substring(1));
-    }, [pathname]);
 
     return (
         <Box component="nav">
@@ -86,12 +83,18 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                                     </Typography>
                                 </Box>
                                 {isNonMobile && (
-                                    <IconButton onClick={() => setSidebarOpen(!isSidebarOpen)}>
+                                    <IconButton
+                                        onClick={() => setSidebarOpen(!isSidebarOpen)}
+                                        aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                                    >
                                         <ChevronLeft />
                                     </IconButton>
                                 )}
                                 {!isNonMobile && (
-                                    <IconButton onClick={() => setSidebarOpen(!isSidebarOpen)}>
+                                    <IconButton
+                                        onClick={() => setSidebarOpen(!isSidebarOpen)}
+                                        aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                                    >
                                         <ChevronLeft />
                                     </IconButton>
                                 )}
@@ -99,7 +102,7 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                         </Box>
                         {/* List of Items */}
                         <List>
-                            {navItems.map(({ text, icon }) => {
+                            {navItems.map(({ text, icon, to }) => {
                                 if (!icon) {
                                     return (
                                         <Typography key={text} sx={{ m: "2.5rem 0 1rem 3rem" }}>
@@ -107,27 +110,24 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                                         </Typography>
                                     );
                                 }
-                                const textLower = text.toLowerCase().replace(/ /g, "");
+                                const isActive = pathname === to || pathname.startsWith(`${to}/`);
                                 return (
                                     <ListItem key={text} disablePadding>
                                         <ListItemButton
-                                            onClick={() => {
-                                                navigate(`/${textLower}`);
-                                                setActive(textLower);
-                                            }}
+                                            onClick={() => navigate(to)}
                                             sx={{
-                                                backgroundColor: active === textLower ? theme.palette.secondary[300] : "transparent",
-                                                color: active === textLower ? theme.palette.primary[600] : theme.palette.secondary[200],
+                                                backgroundColor: isActive ? theme.palette.secondary[300] : "transparent",
+                                                color: isActive ? theme.palette.primary[600] : theme.palette.secondary[200],
                                             }}
                                         >
                                             <ListItemIcon sx={{
                                                 ml: "2rem",
-                                                color: active === textLower ? theme.palette.primary[600] : theme.palette.secondary[200]
+                                                color: isActive ? theme.palette.primary[600] : theme.palette.secondary[200]
                                             }}>
                                                 {icon}
                                             </ListItemIcon>
                                             <ListItemText primary={text} />
-                                            {active === textLower && (<ChevronRightOutlined sx={{ ml: "auto" }} />)}
+                                            {isActive && (<ChevronRightOutlined sx={{ ml: "auto" }} />)}
                                         </ListItemButton>
                                     </ListItem>
                                 );
@@ -137,23 +137,7 @@ const SideBar = ({ user, isNonMobile, isSidebarOpen, setSidebarOpen, drawerWidth
                     <Box bottom="1rem">
                         <Divider />
                         <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
-                            <Box
-                                component="img"
-                                alt="profile"
-                                height="40px"
-                                width="40px"
-                                borderRadius="50%"
-                                sx={{ objectFit: "cover" }}
-                                src={me}
-                            />
-                            <Box textAlign="left">
-                                <Typography fontWeight="bold" fontSize="0.9rem" sx={{ color: theme.palette.secondary[100] }}>
-                                    {user?.name}
-                                </Typography>
-                                <Typography fontSize="0.8rem">
-                                    {user?.occupation}
-                                </Typography>
-                            </Box>
+                            <ProfileBlock user={user} />
                             <SettingsOutlined sx={{
                                 color: theme.palette.secondary[300],
                                 fontSize: "25px"

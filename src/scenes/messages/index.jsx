@@ -225,7 +225,7 @@ export default function Messages() {
           )}
         </Box>
         <Tooltip title="Refresh">
-          <IconButton onClick={refetch} disabled={isFetching}>
+          <IconButton onClick={refetch} disabled={isFetching} aria-label="Refresh messages">
             <RefreshIcon />
           </IconButton>
         </Tooltip>

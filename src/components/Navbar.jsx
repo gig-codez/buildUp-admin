@@ -4,12 +4,12 @@ import { LightModeOutlined,Menu as MenuIcon,
     Search,SettingsOutlined,
     ArrowDropDownOutlined, } from '@mui/icons-material'
 import FlexBetween from './FlexBetween'
+import ProfileBlock from './ProfileBlock'
 import { useDispatch } from 'react-redux'
 import { logout } from 'state'
 import { useNavigate } from 'react-router-dom'
 import { setMode } from 'state'
-import me from "assets/me.jpg"
-import {Box,Menu,MenuItem,Typography}  from '@mui/material'
+import {Menu,MenuItem}  from '@mui/material'
 import { AppBar, Button, IconButton, InputBase, Toolbar } from '@mui/material'
 import { useTheme } from '@emotion/react'
 
@@ -49,8 +49,8 @@ const Navbar = ({isSidebarOpen,setSidebarOpen,user}) => {
   gap="3rem"
   p="0.1rem  1.5rem"
 >
-    <InputBase placeholder='Search...'/>
-    <IconButton>
+    <InputBase placeholder='Search...' aria-label="Search"/>
+    <IconButton aria-label="Search">
         <Search/>
     </IconButton>
     </FlexBetween>
@@ -60,31 +60,14 @@ const Navbar = ({isSidebarOpen,setSidebarOpen,user}) => {
      <IconButton onClick={()=>dispatch(setMode())}>
   {theme.palette.mode === "dark" ?(<DarkModeOutlined sx={{fontSize:"25px"}}/>):(<LightModeOutlined sx={{fontSize:"25px"}}/>)}
     </IconButton>
-   <IconButton>
+   <IconButton aria-label="Settings">
     <SettingsOutlined sx={{fontSize:"25px"}}/>
   </IconButton>
 
   {/* anchorEl */}
   <FlexBetween>
     <Button onClick={handleClick} sx={{display:"flex",justifyContent:"space-between",alignItems:"center" ,textTransform:"none",gap:"1rem"}}>
-    <Box  
-         component="img"
-          alt="profileimage"
-          height="40px"
-          width="40px"
-          borderRadius="50%"
-          sx={{objectFit:"cover"}} 
-          src={me}
-          />
-             <Box textAlign="left"> 
-          <Typography fontWeight="bold" fontSize="0.9rem" sx={{color:theme.palette.secondary[100]}}>
-             {user?.name}
-          </Typography>
-          <Typography fontSize="0.8rem">
-             {user?.occupation}
-          </Typography>
-          
-        </Box>
+        <ProfileBlock user={user} />
         <ArrowDropDownOutlined sx={{color:theme.palette.secondary[300],fontSize:"25px"}}/>
     </Button>
     <Menu 

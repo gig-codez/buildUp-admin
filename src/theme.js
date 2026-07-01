@@ -136,6 +136,48 @@ export const themeSettings = (mode) => {
           },
         },
       },
+      MuiDataGrid: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            border: "none",
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderBottom: "none",
+              fontWeight: "bold",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: theme.palette.primary.light,
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderTop: "none",
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${theme.palette.secondary[200]} !important`,
+            },
+          }),
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          switchBase: ({ theme }) => ({
+            "&.Mui-checked": {
+              color: theme.palette.common.black,
+              "&:hover": {
+                backgroundColor: theme.palette.action.hover,
+              },
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: theme.palette.common.black,
+            },
+          }),
+        },
+      },
     },
   };
 };

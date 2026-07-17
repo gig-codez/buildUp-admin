@@ -1,32 +1,28 @@
 import React, { useState } from 'react';
-import { Box, useTheme, Switch } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { useGetConsutantsQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
+import { Box, Switch } from '@mui/material';
+import { useGetConsultantsQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
 import Header from 'components/Header';
+import RecordDetailDialog from 'components/RecordDetailDialog';
 import { DataGrid } from '@mui/x-data-grid';
 
-
-// Custom switch component
-const BlackSwitch = styled(Switch)(({ theme }) => ({
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: '#000',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.08)',
-    },
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#000',
-  },
-}));
+const DETAIL_FIELDS = [
+  { key: 'first_name' },
+  { key: 'last_name' },
+  { key: 'email', label: 'Email Address' },
+  { key: 'tel_num', label: 'Telephone Number' },
+  { key: 'profession', format: (v) => v?.name || 'N/A' },
+  { key: 'address' },
+  { key: 'active', format: (v) => (v ? 'Active' : 'Inactive') },
+];
 
 const Consultants = () => {
-  const { data, isLoading } = useGetConsutantsQuery();
+  const { data, isLoading } = useGetConsultantsQuery();
   const [activateUser] = useActivateUserMutation();
   const [deactivateUser] = useDeactivateUserMutation();
-  const theme = useTheme();
   const consultantData = data?.data|| [];
 
   const [localSwitchState, setLocalSwitchState] = useState({});
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const handleToggle = async (id, newState) => {
     setLocalSwitchState(prevState => ({ ...prevState, [id]: newState }));
@@ -68,7 +64,7 @@ const Consultants = () => {
       field: 'profession',
       headerName: 'Profession',
       flex: 0.5,
-      valueGetter: (params) => params.row.profession.name,
+      valueGetter: (params) => params.row.profession?.name || 'N/A',
     },
     {
       field: 'address',
@@ -82,8 +78,9 @@ const Consultants = () => {
       renderCell: (params) => {
         const isActive = localSwitchState[params.row._id] ?? params.row.active;
         return (
-          <BlackSwitch
+          <Switch
             checked={isActive}
+            onClick={(e) => e.stopPropagation()}
             onChange={() => handleToggle(params.row._id, !isActive)}
           />
         );
@@ -94,47 +91,24 @@ const Consultants = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="CONSULTANTS" subtitle="List of consultants " />
-      <Box mt="40px" height="100vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            // Add bottom border
-            fontWeight: 'bold', // Make header text bold
-          },
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-            borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important" // Remove left border for first column
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important" // Remove right border for last column
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
-          },
-        }}
-      >
+      <Box mt="40px" height="100vh">
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
           rows={consultantData}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow ? `${selectedRow.first_name || ''} ${selectedRow.last_name || ''}`.trim() : ''}
+        subtitle="Consultant details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+      />
     </Box>
   );
 }

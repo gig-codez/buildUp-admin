@@ -34,6 +34,18 @@ export const api = createApi({
     "Profession",
     "Suppliertypes",
     "Deals",
+    "ContactRequests",
+    "Messages",
+    "Orders",
+    "Role",
+    "account",
+    "newSupplierTypes",
+    "Revenue",
+    "EscrowFees",
+    "WalletTransactions",
+    "Products",
+    "Jobs",
+    "EscrowMessages",
   ],
   endpoints: (build) => ({
     getBusiness: build.query({
@@ -137,9 +149,143 @@ export const api = createApi({
       invalidatesTags: ["account"],
     }),
     ///consultants
-    getConsutants: build.query({
+    getConsultants: build.query({
       query: () => `get/consultants`,
-      providesTags: ["Supplier"],
+      providesTags: ["Consultants"],
+    }),
+  
+  // ── Admin Revenue ────────────────────────────────────────────────────────
+ 
+    // Summary stats: wallet balances + escrow overview
+    getRevenueStats: build.query({
+      query: () => `admin-revenue/stats`,
+      providesTags: ["Revenue"],
+    }),
+ 
+    // Paginated list of all escrows with fee info
+    getEscrowFees: build.query({
+      query: (status = "") =>
+        status ? `admin-revenue/escrow-fees?status=${status}` : `admin-revenue/escrow-fees`,
+      providesTags: ["EscrowFees"],
+    }),
+ 
+    // Admin wallet transaction history
+    getWalletTransactions: build.query({
+      query: () => `admin-revenue/transactions`,
+      providesTags: ["WalletTransactions"],
+    }),
+ 
+    // Admin initiates a withdrawal to mobile money
+    initiateAdminWithdrawal: build.mutation({
+      query: (body) => ({
+        url: `admin-revenue/withdraw`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Revenue", "WalletTransactions"],
+    }),
+
+    // ── Contact Requests (client → admin → contractor routing) ────────────
+    getContactRequests: build.query({
+      query: (status = "") =>
+        status ? `admin/contact-requests?status=${status}` : `admin/contact-requests`,
+      providesTags: ["ContactRequests"],
+    }),
+    updateContactRequestStatus: build.mutation({
+      query: ({ id, status, adminNote }) => ({
+        url: `admin/contact-requests/${id}/status`,
+        method: "PATCH",
+        body: { status, adminNote },
+      }),
+      invalidatesTags: ["ContactRequests"],
+    }),
+
+    // ── Message Inbox (all comms route through admin) ─────────────────────
+    getAdminMessages: build.query({
+      query: ({ status = "", page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams({ page, limit });
+        if (status) params.set("status", status);
+        return `admin/messages?${params}`;
+      },
+      providesTags: ["Messages"],
+    }),
+    forwardMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/messages/${id}/forward`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["Messages"],
+    }),
+    rejectMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/messages/${id}/reject`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["Messages"],
+    }),
+
+    // ── Escrow Chat Moderation (task-chat messages route through admin) ───
+    getAdminEscrowMessages: build.query({
+      query: ({ status = "", page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams({ page, limit });
+        if (status) params.set("status", status);
+        return `admin/escrow-messages?${params}`;
+      },
+      providesTags: ["EscrowMessages"],
+    }),
+    forwardEscrowMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/escrow-messages/${id}/forward`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["EscrowMessages"],
+    }),
+    rejectEscrowMessage: build.mutation({
+      query: ({ id, admin_note = "" }) => ({
+        url: `admin/escrow-messages/${id}/reject`,
+        method: "PATCH",
+        body: { admin_note },
+      }),
+      invalidatesTags: ["EscrowMessages"],
+    }),
+
+    // ── Orders (all platform orders) ──────────────────────────────────────
+    getAllOrders: build.query({
+      query: (status = "") =>
+        status ? `orders/all?status=${status}` : `orders/all`,
+      providesTags: ["Orders"],
+    }),
+    updateOrderStatus: build.mutation({
+      query: ({ id, status }) => ({
+        url: `orders/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["Orders"],
+    }),
+
+    // ── Products (supplier stock with categories) ──────────────────────────
+    getAllProducts: build.query({
+      query: ({ category = "", page = 1, pageSize = 50 } = {}) => {
+        const params = new URLSearchParams({ page, pageSize });
+        if (category && category !== "All") params.set("category", category);
+        return `stock/get_stocks?${params}`;
+      },
+      providesTags: ["Products"],
+    }),
+
+    // ── Jobs (all job posts with categories) ──────────────────────────────
+    getAllAdminJobs: build.query({
+      query: ({ category = "", status = "", page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams({ page, limit });
+        if (category && category !== "All") params.set("category", category);
+        if (status && status !== "All") params.set("status", status);
+        return `get/jobs?${params}`;
+      },
+      providesTags: ["Jobs"],
     }),
   }),
 });
@@ -162,8 +308,22 @@ export const {
   useGetDealsQuery,
   useActivateUserMutation,
   useDeactivateUserMutation,
-  useGetConsutantsQuery,
-  useGetSupplierDealsQuery,
-  useGetSupplierDealsBySupplierIdQuery,
-  useAddDealMutation,
+  useGetConsultantsQuery,
+    // Revenue hooks
+  useGetRevenueStatsQuery,
+  useGetEscrowFeesQuery,
+  useGetWalletTransactionsQuery,
+  useInitiateAdminWithdrawalMutation,
+  useGetContactRequestsQuery,
+  useUpdateContactRequestStatusMutation,
+  useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
+  useGetAdminMessagesQuery,
+  useForwardMessageMutation,
+  useRejectMessageMutation,
+  useGetAdminEscrowMessagesQuery,
+  useForwardEscrowMessageMutation,
+  useRejectEscrowMessageMutation,
+  useGetAllProductsQuery,
+  useGetAllAdminJobsQuery,
 } = api;

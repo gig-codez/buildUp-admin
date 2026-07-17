@@ -13,8 +13,9 @@ const Overview = () => {
       />
       <Box height="75vh">
         <FormControl sx={{ mt: "1rem" }}>
-          <InputLabel>View</InputLabel>
+          <InputLabel id="overview-view-label">View</InputLabel>
           <Select
+            labelId="overview-view-label"
             value={view}
             label="View"
             onChange={(e) => setView(e.target.value)}

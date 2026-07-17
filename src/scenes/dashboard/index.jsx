@@ -1,9 +1,13 @@
 import React from 'react'
 
-import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery } from 'state/api'
+import {useGetBusinessQuery, useGetSuppliersQuery, useGetClientsQuery, useGetContractorsQuery,useGetCategoryQuery,useGetDealsQuery, useGetRevenueStatsQuery, useGetContactRequestsQuery, useGetAllOrdersQuery } from 'state/api'
 import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
 import { PointOfSaleOutlined,Groups2Outlined, BuildOutlined,ReceiptLongOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { Box, useTheme, useMediaQuery } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import StatBox from 'components/StatBox'
@@ -18,6 +22,9 @@ const Dashboard = () => {
   const { data: contractorsdata } = useGetContractorsQuery();
   const { data: categorydata, isLoading: categoryLoadingData } = useGetCategoryQuery();
   const { data: dealsData } = useGetDealsQuery();
+  const { data: revenueStats } = useGetRevenueStatsQuery();
+  const { data: contactRequestsData } = useGetContactRequestsQuery("pending");
+  const { data: ordersData } = useGetAllOrdersQuery("pending");
 
   //length
   const supplierlength = suplierdata?.data?.length
@@ -25,7 +32,16 @@ const Dashboard = () => {
   const clientslength = clientsdata?.employers?.length
   const contractorslength = contractorsdata?.data?.length
   const categorydatalength=categorydata?.length
-   const deallength = dealsData?.deals?.length
+  const deallength = dealsData?.deals?.length
+
+  // revenue
+  const availableBalance = revenueStats?.wallet?.available_balance
+  const totalFeesEarned = revenueStats?.wallet?.total_fees_earned
+  const formatUGX = (val) => val !== undefined ? `UGX ${Number(val).toLocaleString()}` : '...'
+
+  // communication & orders
+  const pendingContactRequests = contactRequestsData?.data?.length ?? 0
+  const pendingOrders = ordersData?.data?.length ?? 0
 
   const isNonMediumScreens = useMediaQuery("(min-width:1200px)");
   const theme = useTheme();
@@ -108,46 +124,61 @@ const Dashboard = () => {
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
-        /><StatBox
-        title="Supplier Types "
-        value={categorydatalength}
-        icon={
-          <PointOfSaleOutlined 
-            sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-          />
-        }
-      />
-        
+        />
+        <StatBox
+          title="Supplier Types"
+          value={categorydatalength}
+          icon={
+            <PointOfSaleOutlined
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+        />
+        <StatBox
+          title="Total Fees Earned"
+          value={formatUGX(totalFeesEarned)}
+          icon={
+            <MonetizationOnOutlinedIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Platform escrow revenue"
+        />
+        <StatBox
+          title="Available Balance"
+          value={formatUGX(availableBalance)}
+          icon={
+            <AccountBalanceWalletOutlinedIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Ready to withdraw"
+        />
+        <StatBox
+          title="Pending Contact Requests"
+          value={pendingContactRequests}
+          icon={
+            <ConnectWithoutContactIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Awaiting admin action"
+        />
+        <StatBox
+          title="Pending Orders"
+          value={pendingOrders}
+          icon={
+            <Inventory2OutlinedIcon
+              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+            />
+          }
+          description="Awaiting supplier approval"
+        />
 
         {/* ROW 2 */}
         <Box
           gridColumn="span 8"
           gridRow="span 3"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
         >
 
           <DataGrid
@@ -156,36 +187,18 @@ const Dashboard = () => {
             rows={businessdata?.data || []}
             columns={Businesscolumns}
             sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-                borderRadius: "5rem",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
+              borderRadius: "0.55rem",
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: theme.palette.primary.main,
                 color: theme.palette.primary.contrastText,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
-
                 },
                 padding: "10px 0",
               },
               "& .MuiDataGrid-columnSeparator": {
                 display: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.background.alt,
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderTop: "none",
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${theme.palette.secondary[200]} !important`,
               },
             }}
           />
@@ -203,36 +216,18 @@ const Dashboard = () => {
             columns={Categorycolumns}
             rows={categorydata || []}
             sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-                borderRadius: "5rem",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
+              borderRadius: "0.55rem",
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: theme.palette.primary.main,
                 color: theme.palette.primary.contrastText,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
-
                 },
                 padding: "10px 0",
               },
               "& .MuiDataGrid-columnSeparator": {
                 display: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.background.alt,
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderTop: "none",
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${theme.palette.secondary[200]} !important`,
               },
             }}
           />

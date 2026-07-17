@@ -1,31 +1,28 @@
 import React, { useState } from 'react';
-import { Box, useTheme, Switch } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Switch } from '@mui/material';
 import { useGetSuppliersQuery, useActivateUserMutation, useDeactivateUserMutation } from 'state/api'; // Ensure you have these hooks set up correctly
 import Header from 'components/Header'; // Ensure this path is correct
+import RecordDetailDialog from 'components/RecordDetailDialog';
 import { DataGrid } from '@mui/x-data-grid';
 
-// Custom switch component
-const BlackSwitch = styled(Switch)(({ theme }) => ({
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: '#000',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.08)',
-    },
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#000',
-  },
-}));
+const DETAIL_FIELDS = [
+  { key: 'business_name' },
+  { key: 'business_email_address', label: 'Email' },
+  { key: 'TIN' },
+  { key: 'balance' },
+  { key: 'business_tel', label: 'Phone Number' },
+  { key: 'supplier_type', label: 'Supplier Type', format: (v) => v?.name || '—' },
+  { key: 'active', format: (v) => (v ? 'Active' : 'Inactive') },
+];
 
 const Suppliers = () => {
   const { data, isLoading } = useGetSuppliersQuery();
   const [activateUser] = useActivateUserMutation();
   const [deactivateUser] = useDeactivateUserMutation();
-  const theme = useTheme();
   const supplier_data = data?.data;
 
   const [localSwitchState, setLocalSwitchState] = useState({});
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const handleToggle = async (id, newState) => {
     setLocalSwitchState(prevState => ({ ...prevState, [id]: newState }));
@@ -68,14 +65,16 @@ const Suppliers = () => {
       headerName: "Phone Number",
       flex: 1,
       renderCell: (params) => {
-        return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+        return params.value
+          ? params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")
+          : "—";
       },
     },
     {
       field: "supplier_type",
       headerName: "Supplier Type",
       flex: 1,
-      valueGetter: (params) => params.row.supplier_type.name,
+      valueGetter: (params) => params.row.supplier_type?.name || "—",
     },
     {
       field: "active",
@@ -84,8 +83,9 @@ const Suppliers = () => {
       renderCell: (params) => {
         const isActive = localSwitchState[params.row._id] ?? params.row.active;
         return (
-          <BlackSwitch
+          <Switch
             checked={isActive}
+            onClick={(e) => e.stopPropagation()}
             onChange={() => handleToggle(params.row._id, !isActive)}
           />
         );
@@ -98,46 +98,25 @@ const Suppliers = () => {
       <Header title="SUPPLIERS" subtitle="List of suppliers" />
       <Box
         mt="40px"
-        height="200vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderBottom: "1px solid rgba(224, 224, 224, 1)", // Add bottom border
-            fontWeight: 'bold', // Make header text bold
-          },
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important" // Remove left border for first column
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important" // Remove right border for last column
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
-          },
-        }}
+        height="100vh"
       >
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
           rows={supplier_data || []}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow?.business_name}
+        subtitle="Supplier details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+      />
     </Box>
   );
 };

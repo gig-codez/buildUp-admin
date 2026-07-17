@@ -1,47 +1,47 @@
+// Indigo brand palette — matches Flutter & Next.js apps
 export const tokensDark = {
   grey: {
-    0: "#ffffff", // manually adjusted
-    10: "#f6f6f6", // manually adjusted
-    50: "#f0f0f0", // manually adjusted
-    100: "#e0e0e0",
-    200: "#c2c2c2",
-    300: "#a3a3a3",
-    400: "#858585",
-    500: "#666666",
-    600: "#525252",
-    700: "#3d3d3d",
-    800: "#292929",
-    900: "#141414",
-    1000: "#000000", // manually adjusted
+    0: "#ffffff",
+    10: "#f8fafc",
+    50: "#f1f5f9",
+    100: "#e2e8f0",
+    200: "#cbd5e1",
+    300: "#94a3b8",
+    400: "#64748b",
+    500: "#475569",
+    600: "#334155",
+    700: "#1e293b",
+    800: "#0f172a",
+    900: "#020617",
+    1000: "#000000",
   },
   primary: {
-    // blue
-    100: "#d3d4de",
-    200: "#a6a9be",
-    300: "#7a7f9d",
-    400: "#4d547d",
-    500: "#21295c",
-    600: "#191F45", // manually adjusted
-    700: "#141937",
-    800: "#0d1025",
-    900: "#070812",
+    // Indigo shades
+    100: "#e0e7ff",
+    200: "#c7d2fe",
+    300: "#a5b4fc",
+    400: "#818cf8",
+    500: "#6366f1",
+    600: "#4f46e5", // brand primary
+    700: "#4338ca",
+    800: "#3730a3",
+    900: "#312e81",
   },
   secondary: {
-    // yellow
-    50: "#f0f0f0", // manually adjusted
-    100: "#fff6e0",
-    200: "#ffedc2",
-    300: "#ffe3a3",
-    400: "#ffda85",
-    500: "#ffd166",
-    600: "#cca752",
-    700: "#997d3d",
-    800: "#665429",
-    900: "#332a14",
+    // Violet accent
+    50: "#faf5ff",
+    100: "#f3e8ff",
+    200: "#e9d5ff",
+    300: "#d8b4fe",
+    400: "#c084fc",
+    500: "#a855f7",
+    600: "#9333ea",
+    700: "#7e22ce",
+    800: "#6b21a8",
+    900: "#581c87",
   },
 };
 
-// function that reverses the color palette
 function reverseTokens(tokensDark) {
   const reversedTokens = {};
   Object.entries(tokensDark).forEach(([key, val]) => {
@@ -65,73 +65,118 @@ export const themeSettings = (mode) => {
       mode: mode,
       ...(mode === "dark"
         ? {
-            // palette values for dark mode
             primary: {
               ...tokensDark.primary,
-              main: tokensDark.primary[400],
+              main: tokensDark.primary[600],
               light: tokensDark.primary[400],
+              dark: tokensDark.primary[800],
             },
             secondary: {
               ...tokensDark.secondary,
-              main: tokensDark.secondary[300],
+              main: tokensDark.secondary[400],
+              light: tokensDark.secondary[200],
             },
             neutral: {
               ...tokensDark.grey,
-              main: tokensDark.grey[500],
+              main: tokensDark.grey[400],
             },
             background: {
-              default: tokensDark.primary[600],
-              alt: tokensDark.primary[500],
+              default: tokensDark.grey[800],
+              alt: tokensDark.grey[700],
+              paper: tokensDark.grey[700],
             },
           }
         : {
-            // palette values for light mode
             primary: {
               ...tokensLight.primary,
-              main: tokensDark.grey[50],
-              light: tokensDark.grey[100],
+              main: tokensDark.primary[600],
+              light: tokensDark.primary[100],
+              dark: tokensDark.primary[700],
             },
             secondary: {
               ...tokensLight.secondary,
-              main: tokensDark.secondary[600],
-              light: tokensDark.secondary[700],
+              main: tokensDark.secondary[500],
+              light: tokensDark.secondary[200],
             },
             neutral: {
               ...tokensLight.grey,
-              main: tokensDark.grey[500],
+              main: tokensDark.grey[400],
             },
             background: {
-              default: tokensDark.grey[0],
-              alt: tokensDark.grey[50],
+              default: tokensDark.grey[10],
+              alt: tokensDark.grey[0],
+              paper: tokensDark.grey[0],
             },
           }),
     },
     typography: {
       fontFamily: ["Poppins", "sans-serif"].join(","),
       fontSize: 12,
-      h1: {
-        fontFamily: ["Poppins", "sans-serif"].join(","),
-        fontSize: 40,
+      h1: { fontFamily: ["Poppins", "sans-serif"].join(","), fontSize: 40 },
+      h2: { fontFamily: ["Poppins", "sans-serif"].join(","), fontSize: 32 },
+      h3: { fontFamily: ["Poppins", "sans-serif"].join(","), fontSize: 24 },
+      h4: { fontFamily: ["Poppins", "sans-serif"].join(","), fontSize: 20 },
+      h5: { fontFamily: ["Poppins", "sans-serif"].join(","), fontSize: 16 },
+      h6: { fontFamily: ["Poppins", "sans-serif"].join(","), fontSize: 14 },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          containedPrimary: {
+            backgroundColor: tokensDark.primary[600],
+            "&:hover": { backgroundColor: tokensDark.primary[700] },
+          },
+        },
       },
-      h2: {
-        fontFamily: ["Poppins", "sans-serif"].join(","),
-        fontSize: 32,
+      MuiChip: {
+        styleOverrides: {
+          colorPrimary: {
+            backgroundColor: tokensDark.primary[600],
+            color: "#fff",
+          },
+        },
       },
-      h3: {
-        fontFamily: ["Poppins", "sans-serif"].join(","),
-        fontSize: 24,
+      MuiDataGrid: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            border: "none",
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderBottom: "none",
+              fontWeight: "bold",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: theme.palette.primary.light,
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderTop: "none",
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${theme.palette.secondary[200]} !important`,
+            },
+          }),
+        },
       },
-      h4: {
-        fontFamily: ["Poppins", "sans-serif"].join(","),
-        fontSize: 20,
-      },
-      h5: {
-        fontFamily: ["Poppins", "sans-serif"].join(","),
-        fontSize: 16,
-      },
-      h6: {
-        fontFamily: ["Poppins", "sans-serif"].join(","),
-        fontSize: 14,
+      MuiSwitch: {
+        styleOverrides: {
+          switchBase: ({ theme }) => ({
+            "&.Mui-checked": {
+              color: theme.palette.common.black,
+              "&:hover": {
+                backgroundColor: theme.palette.action.hover,
+              },
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: theme.palette.common.black,
+            },
+          }),
+        },
       },
     },
   };

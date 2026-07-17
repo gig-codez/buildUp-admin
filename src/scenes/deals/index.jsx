@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Button, Modal, TextField, Typography, useTheme, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Button, Modal, TextField, Typography, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import { toast } from 'react-toastify';
 import { useGetDealsQuery, useGetCategoryQuery, useAddDealsMutation, useDeleteDealsMutation } from 'state/api';
 import Header from 'components/Header';
 
 const Deals = () => {
-  const theme = useTheme();
   const { data: dealsData, isLoading: isLoadingDeals } = useGetDealsQuery();
   const { data: supplierTypesData } = useGetCategoryQuery();
-  // Ensure this logs the expected data
-  const [addDeals] = useAddDealsMutation();
-  const [deleteDeals] = useDeleteDealsMutation();
+  const [addDeals, { isLoading: isAdding }] = useAddDealsMutation();
+  const [deleteDeals, { isLoading: isDeleting }] = useDeleteDealsMutation();
 
   const [open, setOpen] = useState(false);
   const [newDeal, setNewDeal] = useState({ name: '', supplier_type: '' });
+  const [nameError, setNameError] = useState('');
   const [deleteId, setDeleteId] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -21,6 +21,7 @@ const Deals = () => {
   const handleClose = () => {
     setOpen(false);
     setNewDeal({ name: '', supplier_type: '' });
+    setNameError('');
   };
 
   const handleChange = (e) => {
@@ -29,11 +30,24 @@ const Deals = () => {
       ...prevState,
       [name]: value,
     }));
+    if (name === 'name' && value.trim()) {
+      setNameError('');
+    }
   };
 
   const handleSubmit = async () => {
-    await addDeals(newDeal);
-    handleClose();
+    if (!newDeal.name.trim()) {
+      setNameError('Deal name is required.');
+      return;
+    }
+
+    try {
+      await addDeals(newDeal).unwrap();
+      toast.success('Deal added successfully.');
+      handleClose();
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to add deal.');
+    }
   };
 
   const handleDeleteClick = (id) => {
@@ -42,9 +56,14 @@ const Deals = () => {
   };
 
   const handleDeleteConfirm = async () => {
-    await deleteDeals(deleteId);
-    setConfirmOpen(false);
-    setDeleteId(null);
+    try {
+      await deleteDeals(deleteId).unwrap();
+      toast.success('Deal deleted successfully.');
+      setConfirmOpen(false);
+      setDeleteId(null);
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to delete deal.');
+    }
   };
 
   const handleDeleteCancel = () => {
@@ -100,6 +119,8 @@ const Deals = () => {
             autoFocus
             value={newDeal.name}
             onChange={handleChange}
+            error={!!nameError}
+            helperText={nameError}
           />
           <FormControl fullWidth margin="normal">
             <InputLabel id="supplier-type-label">Supplier Type</InputLabel>
@@ -124,8 +145,9 @@ const Deals = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             onClick={handleSubmit}
+            disabled={isAdding}
           >
-            Add
+            {isAdding ? <CircularProgress size={20} color="inherit" /> : 'Add'}
           </Button>
         </Box>
       </Modal>
@@ -141,11 +163,11 @@ const Deals = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
+          <Button onClick={handleDeleteCancel} color="primary" disabled={isDeleting}>
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="secondary" autoFocus>
-            Delete
+          <Button onClick={handleDeleteConfirm} color="secondary" autoFocus disabled={isDeleting}>
+            {isDeleting ? <CircularProgress size={20} color="inherit" /> : 'Delete'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -153,37 +175,6 @@ const Deals = () => {
       <Box
         mt="20px"
         height="100vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            fontWeight: 'bold',
-          },
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important",
-            borderLeft: "1px solid rgba(224, 224, 224, 1) !important",
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important"
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important"
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
-          },
-        }}
       >
         {isLoadingDeals ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100%">
@@ -208,7 +199,7 @@ const modalStyle = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: (theme) => `1px solid ${theme.palette.divider}`,
   boxShadow: 24,
   p: 4,
 };

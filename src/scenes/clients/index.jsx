@@ -1,7 +1,8 @@
-import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Header from 'components/Header';
+import RecordDetailDialog from 'components/RecordDetailDialog';
 import { useGetClientsQuery } from 'state/api';
 
 const columns = [
@@ -40,58 +41,41 @@ const columns = [
   },
 ];
 
+const DETAIL_FIELDS = [
+  { key: 'first_name' },
+  { key: 'last_name' },
+  { key: 'email_address' },
+  { key: 'TIN_NIN', label: 'TIN/NIN' },
+  { key: 'country' },
+  { key: 'business', label: 'Business Name', format: (v) => v?.business_name || 'N/A' },
+];
+
 const Clients = () => {
   const { data, isLoading } = useGetClientsQuery();
   const newdata= data?.employers
-  // console.log();
- 
-  const theme = useTheme();
+  const [selectedRow, setSelectedRow] = useState(null);
 
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="CLIENTS" subtitle="List of clients " />
-      <Box mt="40px" height="100vh"
-         sx={{
-          "& .MuiDataGrid-root": {
-            border: "none"
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            // Add bottom border
-            fontWeight: 'bold', // Make header text bold
-          },
-          "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
-            borderRight: "1px solid rgba(224, 224, 224, 1) !important", // Add right border to header and cells
-            borderLeft: "1px solid rgba(224, 224, 224, 1) !important", // Add left border to header and cells
-          
-          },
-          "& .MuiDataGrid-columnHeader:first-of-type, .MuiDataGrid-cell:first-of-type": {
-            borderLeft: "none !important" // Remove left border for first column
-          },
-          "& .MuiDataGrid-columnHeader:last-of-type, .MuiDataGrid-cell:last-of-type": {
-            borderRight: "none !important" // Remove right border for last column
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
-          },
-        }}
-      >
+      <Box mt="40px" height="100vh">
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           columns={columns}
           rows={newdata || []}
+          onRowClick={(params) => setSelectedRow(params.row)}
+          sx={{ "& .MuiDataGrid-row": { cursor: "pointer" } }}
         />
       </Box>
+      <RecordDetailDialog
+        open={!!selectedRow}
+        onClose={() => setSelectedRow(null)}
+        title={selectedRow ? `${selectedRow.first_name || ''} ${selectedRow.last_name || ''}`.trim() : ''}
+        subtitle="Client details"
+        row={selectedRow}
+        fields={DETAIL_FIELDS}
+      />
     </Box>
   );
 }

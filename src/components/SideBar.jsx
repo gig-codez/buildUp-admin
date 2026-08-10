@@ -1,12 +1,11 @@
 import React from 'react';
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { SettingsOutlined, ChevronLeft, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, PointOfSaleOutlined, TodayOutlined, WorkOutline, BuildOutlined, SpaceDashboardRounded } from '@mui/icons-material';
+import { SettingsOutlined, ChevronLeft, HomeOutlined, ShoppingCartOutlined, Groups2Outlined, ReceiptLongOutlined, WorkOutline, BuildOutlined, SpaceDashboardRounded } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import ProfileBlock from './ProfileBlock';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import HandshakeIcon from '@mui/icons-material/Handshake';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -34,7 +33,6 @@ const navItems = [
     { text: "Products", icon: <StorefrontOutlinedIcon />, to: "/products" },
     { text: "Jobs", icon: <WorkOutlineIcon />, to: "/jobs" },
     { text: "Orders", icon: <Inventory2OutlinedIcon />, to: "/orders" },
-    { text: "REVENUE", icon: null },
     { text: "REVENUE", icon: null },
     { text: "Escrow Fees", icon: <MonetizationOnOutlinedIcon />, to: "/escrowfees" },
     { text: "Admin Withdraw", icon: <SavingsOutlinedIcon />, to: "/adminwithdraw" },

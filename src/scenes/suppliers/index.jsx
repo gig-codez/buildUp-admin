@@ -97,8 +97,8 @@ const Suppliers = () => {
     <Box m="1.5rem 2.5rem">
       <Header title="SUPPLIERS" subtitle="List of suppliers" />
       <Box
-        mt="40px"
-        height="100vh"
+        mt="1.5rem"
+        height="70vh"
       >
         <DataGrid
           loading={isLoading || !data}

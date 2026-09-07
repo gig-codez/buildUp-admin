@@ -127,23 +127,6 @@ const AdminWithdraw = () => {
     },
   ];
 
-  const gridSx = {
-    '& .MuiDataGrid-root': { border: 'none' },
-    '& .MuiDataGrid-cell': { borderBottom: 'none' },
-    '& .MuiDataGrid-columnHeaders': {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderBottom: 'none',
-      fontWeight: 'bold',
-    },
-    '& .MuiDataGrid-virtualScroller': { backgroundColor: theme.palette.primary.light },
-    '& .MuiDataGrid-footerContainer': {
-      backgroundColor: theme.palette.background.alt,
-      color: theme.palette.secondary[100],
-      borderTop: 'none',
-    },
-  };
-
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="ADMIN WITHDRAW" subtitle="Withdraw your platform profit to mobile money" />
@@ -244,7 +227,7 @@ const AdminWithdraw = () => {
 
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             size="large"
             onClick={handleSubmit}
             disabled={withdrawing}
@@ -263,7 +246,7 @@ const AdminWithdraw = () => {
           </Typography>
         </FlexBetween>
         <Divider sx={{ mb: 2 }} />
-        <Box height="50vh" sx={gridSx}>
+        <Box height="50vh">
           {txLoading ? (
             <Box display="flex" justifyContent="center" alignItems="center" height="100%">
               <CircularProgress />

@@ -24,7 +24,7 @@ const Roles = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="ROLES" subtitle="List of roles" />
-      <Box mt="40px" height="100vh">
+      <Box mt="1.5rem" height="70vh">
         <DataGrid
           loading={isLoading || !data}
           getRowId={(row) => row._id}

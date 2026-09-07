@@ -153,8 +153,8 @@ const Professional = () => {
       </Dialog>
 
       <Box
-        mt="20px"
-        height="100vh"
+        mt="1.5rem"
+        height="65vh"
       >
         {isLoading ? (
           <Box display="flex" justifyContent="center" alignItems="center" height="100%">

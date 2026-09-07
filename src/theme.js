@@ -293,7 +293,7 @@ export const themeSettings = (mode) => {
             fontSize: "0.8125rem",
             "& .MuiDataGrid-main": { borderRadius: 12 },
             "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: dark ? theme.palette.grey[50] : theme.palette.grey[50],
+              backgroundColor: theme.palette.grey[50],
               color: theme.palette.text.secondary,
               fontSize: "0.7rem",
               fontWeight: 600,

@@ -371,8 +371,8 @@ export default function Messages() {
       {/* Header */}
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
         <Box display="flex" alignItems="center" gap={1}>
-          <ChatIcon sx={{ color: theme.palette.secondary[300] }} />
-          <Typography variant="h4" fontWeight="bold" color={theme.palette.secondary[300]}>
+          <ChatIcon sx={{ color: 'primary.main' }} />
+          <Typography variant="h4" fontWeight="bold" color="text.primary">
             Message Inbox
           </Typography>
           {pendingCount > 0 && tabIndex === 0 && (

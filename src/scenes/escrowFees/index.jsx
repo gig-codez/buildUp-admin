@@ -74,7 +74,7 @@ const EscrowFees = () => {
       renderCell: (params) => (
         <Typography
           fontWeight="bold"
-          sx={{ color: theme.palette.primary.main, alignSelf: 'center' }}
+          sx={{ color: theme.palette.success.main, alignSelf: 'center' }}
         >
           {formatUGX(params.value)}
         </Typography>

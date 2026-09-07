@@ -106,9 +106,9 @@ function MessageCard({ msg, onForward, onReject }) {
         {/* Header row */}
         <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
           <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
-            <Chip label={`From: ${roleLabel(msg.sender_id)}`} size="small" color="primary" variant="outlined" />
+            <Chip label={`From: ${roleLabel(msg.sender_id)}`} size="small" variant="outlined" />
             <Typography variant="body2" color="text.secondary">→</Typography>
-            <Chip label={`To: ${roleLabel(msg.receiver_id)}`} size="small" color="secondary" variant="outlined" />
+            <Chip label={`To: ${roleLabel(msg.receiver_id)}`} size="small" variant="outlined" />
           </Box>
           <Chip label={msg.status} size="small" color={statusColor(msg.status)} />
         </Box>
@@ -223,7 +223,6 @@ function EscrowMessageCard({ msg, onForward, onReject }) {
             <Chip
               label={`${msg.sender_role === "employer" ? "Employer" : "Contractor"}: ${msg.sender_name}`}
               size="small"
-              color="primary"
               variant="outlined"
             />
             <Typography variant="body2" color="text.secondary">on</Typography>

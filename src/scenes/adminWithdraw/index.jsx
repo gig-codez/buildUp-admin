@@ -183,7 +183,7 @@ const AdminWithdraw = () => {
           maxWidth: 520,
         }}
       >
-        <Typography variant="h5" fontWeight="bold" mb="1.5rem" color={theme.palette.secondary[100]}>
+        <Typography variant="h5" fontWeight="bold" mb="1.5rem" color="text.primary">
           Withdraw Profit
         </Typography>
 
@@ -241,7 +241,7 @@ const AdminWithdraw = () => {
       {/* ── Transaction History ── */}
       <Box mt="40px">
         <FlexBetween mb="1rem">
-          <Typography variant="h5" fontWeight="bold" color={theme.palette.secondary[100]}>
+          <Typography variant="h5" fontWeight="bold" color="text.primary">
             Transaction History
           </Typography>
         </FlexBetween>

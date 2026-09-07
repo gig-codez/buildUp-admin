@@ -81,7 +81,7 @@ export const tokensLight = {
   secondary: {
     // Numeric slots double as the *text* ramp in light mode.
     100: "#0f172a",
-    200: "#475569",
+    200: "#64748b",
     300: "#94a3b8",
     400: "#cbd5e1",
     500: "#e2e8f0",
@@ -90,7 +90,7 @@ export const tokensLight = {
   warning: { main: "#d97706", light: "#fef3c7", dark: "#b45309" },
   info: { main: "#2563eb", light: "#dbeafe", dark: "#1d4ed8" },
   error: { main: "#dc2626", light: "#fee2e2", dark: "#b91c1c" },
-  text: { primary: "#0f172a", secondary: "#475569", disabled: "#94a3b8" },
+  text: { primary: "#0f172a", secondary: "#64748b", disabled: "#94a3b8" },
   background: { default: "#f7f8fc", alt: "#ffffff", paper: "#ffffff" },
 };
 

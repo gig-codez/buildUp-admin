@@ -64,6 +64,7 @@ const Navbar = ({ isSidebarOpen, setSidebarOpen, user }) => {
                     </IconButton>
 
                     <Button
+                        color="inherit"
                         onClick={handleClick}
                         sx={{ display: "flex", alignItems: "center", textTransform: "none", gap: "0.75rem", borderRadius: "10px", p: "6px 10px" }}
                     >

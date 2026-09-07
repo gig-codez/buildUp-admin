@@ -84,7 +84,7 @@ const Dashboard = () => {
           value={businesslength}
           icon={
             <ShoppingCartOutlined
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
         />
@@ -93,7 +93,7 @@ const Dashboard = () => {
           value={supplierlength}
           icon={
             <Groups2Outlined
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
         />
@@ -103,7 +103,7 @@ const Dashboard = () => {
           value={clientslength}
           icon={
             <ReceiptLongOutlined
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
         />
@@ -112,7 +112,7 @@ const Dashboard = () => {
           value={contractorslength}
           icon={
             <BuildOutlined
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
         />
@@ -121,7 +121,7 @@ const Dashboard = () => {
           value={deallength}
           icon={
             <HandshakeIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
         />
@@ -130,7 +130,7 @@ const Dashboard = () => {
           value={categorydatalength}
           icon={
             <PointOfSaleOutlined
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
         />
@@ -139,7 +139,7 @@ const Dashboard = () => {
           value={formatUGX(totalFeesEarned)}
           icon={
             <MonetizationOnOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
           description="Platform escrow revenue"
@@ -149,7 +149,7 @@ const Dashboard = () => {
           value={formatUGX(availableBalance)}
           icon={
             <AccountBalanceWalletOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
           description="Ready to withdraw"
@@ -159,7 +159,7 @@ const Dashboard = () => {
           value={pendingContactRequests}
           icon={
             <ConnectWithoutContactIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
           description="Awaiting admin action"
@@ -169,7 +169,7 @@ const Dashboard = () => {
           value={pendingOrders}
           icon={
             <Inventory2OutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+              sx={{ color: theme.palette.primary.main, fontSize: "26px" }}
             />
           }
           description="Awaiting supplier approval"
@@ -179,57 +179,31 @@ const Dashboard = () => {
         <Box
           gridColumn="span 8"
           gridRow="span 3"
+          bgcolor={theme.palette.background.alt}
+          border={`1px solid ${theme.palette.divider}`}
+          borderRadius="14px"
+          p="0.5rem"
         >
-
           <DataGrid
             loading={isLoadingBusinessdata || !businessdata}
             getRowId={(row) => row._id}
             rows={businessdata?.data || []}
             columns={Businesscolumns}
-            sx={{
-              borderRadius: "0.55rem",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                "& .MuiDataGrid-columnHeaderTitle": {
-                  fontWeight: "bold",
-                },
-                padding: "10px 0",
-              },
-              "& .MuiDataGrid-columnSeparator": {
-                display: "none",
-              },
-            }}
           />
         </Box>
         <Box
           gridColumn="span 4"
           gridRow="span 3"
-          backgroundColor={theme.palette.background.alt}
-          p="1.5rem"
-          borderRadius="0.55rem"
+          bgcolor={theme.palette.background.alt}
+          border={`1px solid ${theme.palette.divider}`}
+          borderRadius="14px"
+          p="0.5rem"
         >
           <DataGrid
             loading={categoryLoadingData || !categorydata}
             getRowId={(row) => row._id}
             columns={Categorycolumns}
             rows={categorydata || []}
-            sx={{
-              borderRadius: "0.55rem",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                "& .MuiDataGrid-columnHeaderTitle": {
-                  fontWeight: "bold",
-                },
-                padding: "10px 0",
-              },
-              "& .MuiDataGrid-columnSeparator": {
-                display: "none",
-              },
-            }}
           />
         </Box>
       </Box>

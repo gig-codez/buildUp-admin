@@ -1,28 +1,58 @@
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+html,
+body,
+#root,
+.app {
+  height: 100%;
+  width: 100%;
+}
 
-  html,
-  body,
-  #root,
-  .app{
-    height: 100%;
-    width: 100%;
-    font-family: "Inter",sans-serif;
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: #f7f8fc;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Brand-tinted scrollbars (webkit + fixed geometry, no layout thrash) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.65);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #7a7f9d;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #21295c;
-  }
-  
-  /* Handle on Hover */
-  ::-webkit-scrollbar-track:hover {
-    background: #21295c;
-  }
+}

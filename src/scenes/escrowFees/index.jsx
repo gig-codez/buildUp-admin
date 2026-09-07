@@ -74,7 +74,7 @@ const EscrowFees = () => {
       renderCell: (params) => (
         <Typography
           fontWeight="bold"
-          sx={{ color: theme.palette.secondary[300], alignSelf: 'center' }}
+          sx={{ color: theme.palette.primary.main, alignSelf: 'center' }}
         >
           {formatUGX(params.value)}
         </Typography>
@@ -138,7 +138,7 @@ const EscrowFees = () => {
           value={statsLoading ? '...' : formatUGX(wallet.total_fees_earned)}
           icon={
             <MonetizationOnOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description="All-time platform revenue"
@@ -148,7 +148,7 @@ const EscrowFees = () => {
           value={statsLoading ? '...' : formatUGX(wallet.available_balance)}
           icon={
             <AccountBalanceWalletOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description="Ready to withdraw"
@@ -158,7 +158,7 @@ const EscrowFees = () => {
           value={statsLoading ? '...' : formatUGX(wallet.total_withdrawn)}
           icon={
             <PaymentsOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description="Admin payouts to date"
@@ -168,7 +168,7 @@ const EscrowFees = () => {
           value={statsLoading ? '...' : formatUGX(overview.total_escrow_volume)}
           icon={
             <ReceiptLongOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description={`${overview.funded_escrow_count ?? 0} funded escrows`}

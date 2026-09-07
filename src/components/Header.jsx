@@ -1,21 +1,23 @@
-import { useTheme } from '@emotion/react'
-import { Box ,Typography} from '@mui/material'
-import React from 'react'
+import { Box, Typography } from '@mui/material';
+import React from 'react';
 
-const Header = ({title,subtitle}) => {
-    const theme=useTheme();
+const Header = ({ title, subtitle }) => {
   return (
     <Box>
-        <Typography variant='h5' color={theme.palette.secondary[100]} fontWeight="bold" sx={{mb:"5px"}}>
-         {title}
-        </Typography>
+      <Typography
+        variant="h4"
+        fontWeight={700}
+        color="text.primary"
+        sx={{ letterSpacing: "-0.01em" }}
+      >
+        {title}
+      </Typography>
 
-        <Typography variant='h5' color={theme.palette.secondary[300]} >
+      <Typography variant="body1" color="text.secondary" sx={{ mt: "4px" }}>
         {subtitle}
-        </Typography>
-        
+      </Typography>
     </Box>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

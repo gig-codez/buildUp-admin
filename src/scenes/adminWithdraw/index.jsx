@@ -162,7 +162,7 @@ const AdminWithdraw = () => {
           value={statsLoading ? '...' : formatUGX(wallet.available_balance)}
           icon={
             <AccountBalanceWalletOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description="Ready to withdraw now"
@@ -172,7 +172,7 @@ const AdminWithdraw = () => {
           value={statsLoading ? '...' : formatUGX(wallet.total_fees_earned)}
           icon={
             <MonetizationOnOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description="All-time platform revenue"
@@ -182,7 +182,7 @@ const AdminWithdraw = () => {
           value={statsLoading ? '...' : formatUGX(wallet.total_withdrawn)}
           icon={
             <PaymentsOutlinedIcon
-              sx={{ color: theme.palette.secondary[300], fontSize: '26px' }}
+              sx={{ color: theme.palette.primary.main, fontSize: '26px' }}
             />
           }
           description="Total payouts so far"
